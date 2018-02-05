@@ -12,7 +12,7 @@ using ucubot.Model;
 
 namespace ucubot.Controllers
 {
-    [Route("api/[controller]/:[id]")]
+    [Route("api/[controller]")]
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -22,7 +22,6 @@ namespace ucubot.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet]
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
@@ -115,11 +114,12 @@ namespace ucubot.Controllers
             return null;
         }
 
-        [HttpPost]
+
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            var userId = message.UserId;
-            var signalType = message.Text.ConvertSlackMessageToSignalType();
+            var userId = message.user_id;
+            var signalType = message.text.ConvertSlackMessageToSignalType();
+
 
             //TODO: add code to store above values
 
