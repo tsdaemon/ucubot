@@ -1,6 +1,6 @@
-CREATE TABLE LessonSignal (
+CREATE TABLE lesson_signal (
     Id INTEGER primary key NOT NULL AUTO_INCREMENT,
-    Timestamp DATETIME,
-    SignalType INTEGER,
-    UserId varchar(255)
+    timestamp DATETIME,
+    signal_type INTEGER,
+    user_id varchar(255) NOT NULL
 );
