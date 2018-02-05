@@ -57,12 +57,21 @@ namespace ucubot.Controllers
         {   
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
-            string query = "select * from lesson_signal where id =";//to do connection.Open();
+            var dataTable = new DataTable();
+            string query = "select * from lesson_signal where id ="+id;
             MySqlCommand cmd = new  MySqlCommand(query, connection);
             MySqlDataAdapter dataAdapter = new MySqlDataAdapter(cmd);
             dataAdapter.Fill(dataTable);
             
-            
+            var row = dataTable.Rows[0];
+            var lessonSignalDto = new LessonSignalDto
+            {
+                UserId = (string) row["user_id"],
+                Timestamp = Convert.ToDateTime(row["timestamp"]),
+                Type = (LessonSignalType) row["signal_type"],
+                Id = (int) row["id"]
+            };
+            return lessonSignalDto;
             
             connection.Close();
             dataAdapter.Dispose();
@@ -77,8 +86,18 @@ namespace ucubot.Controllers
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
 
-            // TODO: add insert command to store signal
-            
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+       
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            var cmd = new MySqlCommand("INSERT INTO lesson_signal (signal_type, user_id, timestamp) " +
+                                       "VALUES (@signalType, @userId, @timestamp)",
+                connection);
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            cmd.Parameters.AddWithValue("@signalType", signalType);
+            cmd.Parameters.AddWithValue("@userId", userId);
+            cmd.Parameters.AddWithValue("@timestamp", timestamp);
+            cmd.ExecuteNonQuery();
             return Accepted();
         }
         
