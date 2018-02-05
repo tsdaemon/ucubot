@@ -1,0 +1,4 @@
+CREATE DATABASE ucubot;
+CREATE USER 'yuzkiv'@'%' IDENTIFIED BY 'pasPKN-16-B';
+GRANT ALL PRIVILEGES ON ucubot . * TO 'yuzkiv'@'%';
+FLUSH PRIVILEGES;
