@@ -9,7 +9,7 @@ using ucubot.Model;
 
 namespace ucubot.Controllers
 {
-    [Route("api/[controller]/:[id]")]
+    [Route("api/[controller]")]
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -53,7 +53,7 @@ namespace ucubot.Controllers
             return lessonSignalDtos;
         }
         
-        [HttpGet]
+        [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {   
             var connectionString = _configuration.GetConnectionString("BotDatabase");
@@ -91,8 +91,8 @@ namespace ucubot.Controllers
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var userId = message.UserId;
-            var signalType = message.Text.ConvertSlackMessageToSignalType();
+            var userId = message.user_id;
+            var signalType = message.text.ConvertSlackMessageToSignalType();
 
             
             MySqlConnection cnn = new MySqlConnection(connectionString);
@@ -117,7 +117,7 @@ namespace ucubot.Controllers
             return Accepted();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
