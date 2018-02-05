@@ -98,13 +98,21 @@ namespace ucubot.Controllers
             cmd.Parameters.AddWithValue("@userId", userId);
             cmd.Parameters.AddWithValue("@timestamp", timestamp);
             cmd.ExecuteNonQuery();
+            connection.Close();
             return Accepted();
         }
         
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            //TODO: add delete command to remove signal
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+       
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            var cmd = new MySqlCommand("DELETE FROM lesson_signal WHERE id=" + id,
+                connection);
+            cmd.ExecuteNonQuery();
+            connection.Close();
             return Accepted();
         }
     }
