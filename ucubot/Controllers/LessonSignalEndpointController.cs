@@ -14,6 +14,8 @@ namespace ucubot.Controllers
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
+        private DataTable dataTable = new DataTable();
+
 
         public LessonSignalEndpointController(IConfiguration configuration)
         {
@@ -24,16 +26,45 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connection = new MySqlConnection(connectionString);
+            string query = "select * from lesson_signal";
+            connection.Open();
+            MySqlCommand cmd = new  MySqlCommand(query, connection);
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(cmd);
+            dataAdapter.Fill(dataTable);
             
-            //TODO: replace with database query
-            return new LessonSignalDto[0];
+            List<LessonSignalDto> lessonSignalDtos = new List<LessonSignalDto>();
+            
+            foreach(DataRow row in dataTable.Rows)
+            {
+                LessonSignalDto less = new LessonSignalDto();
+                less.Id = (int) row["id"];
+                less.UserId = (string) row["user_id"];
+                less.Type = SignalTypeUtils.ConvertSlackMessageToSignalType((string)row["signal_type"]) ;
+                less.Timestamp = Convert.ToDateTime(row["time_stamp"]);
+                lessonSignalDtos.Add(less);
+            }
+            connection.Close();
+            dataAdapter.Dispose();
+            return lessonSignalDtos;
         }
         
         [HttpGet]
         public LessonSignalDto ShowSignal(long id)
         {   
-            //TODO: replace with database query
-            return null;
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connection = new MySqlConnection(connectionString);
+            string query = "select * from lesson_signal where id =";//to do connection.Open();
+            MySqlCommand cmd = new  MySqlCommand(query, connection);
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(cmd);
+            dataAdapter.Fill(dataTable);
+            
+            
+            
+            connection.Close();
+            dataAdapter.Dispose();
+            return lessonSignalDto;
+            
         }
         
         [HttpPost]
