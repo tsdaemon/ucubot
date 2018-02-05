@@ -10,7 +10,7 @@ using ucubot.Model;
 
 namespace ucubot.Controllers
 {
-    [Route("api/[controller]/:[id]")]
+    [Route("api/[controller]")]
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -26,6 +26,7 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
+
             var connection = new MySqlConnection(connectionString);
             string query = "select * from lesson_signal";
             connection.Open();
@@ -47,10 +48,12 @@ namespace ucubot.Controllers
             connection.Close();
             dataAdapter.Dispose();
             return lessonSignalDtos;
+
         }
         
-        [HttpGet]
+        [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
+
         {   
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
@@ -63,25 +66,26 @@ namespace ucubot.Controllers
             
             connection.Close();
             dataAdapter.Dispose();
-            return lessonSignalDto;
+            return null;
             
+
         }
         
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            var userId = message.UserId;
-            var signalType = message.Text.ConvertSlackMessageToSignalType();
+            var userId = message.user_id;
+            var signalType = message.text.ConvertSlackMessageToSignalType();
 
-            //TODO: add code to store above values
+            // TODO: add insert command to store signal
             
             return Accepted();
         }
         
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            //TODO: add code to delete a record with the given id
+            //TODO: add delete command to remove signal
             return Accepted();
         }
     }

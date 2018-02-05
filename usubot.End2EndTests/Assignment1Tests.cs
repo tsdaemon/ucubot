@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using ucubot.Model;
 
@@ -27,7 +28,7 @@ namespace usubot.End2EndTests
         [SetUp]
         public void Init()
         {
-            _client = new HttpClient {BaseAddress = new Uri("http://127.0.0.1:8081")};
+            _client = new HttpClient {BaseAddress = new Uri("http://app:80")};
         }
         
         [Test, Order(-10)]
@@ -118,17 +119,17 @@ namespace usubot.End2EndTests
             // create
             var content = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("UserId", "@Anatolii"),
-                new KeyValuePair<string, string>("Text", "simple")
+                new KeyValuePair<string, string>("user_id", "U111"),
+                new KeyValuePair<string, string>("text", "simple")
             });
             var createResponse = await _client.PostAsync("/api/LessonSignalEndpoint", content);
             createResponse.StatusCode.Should().Be(HttpStatusCode.Accepted);
             
             // check
             getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            values = JsonConvert.DeserializeObject<LessonSignalDto[]>(getResponse);
+            values = ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(1);
-            values[0].UserId.Should().Be("@Anatolii");
+            values[0].UserId.Should().Be("U111");
             values[0].Type.Should().Be(LessonSignalType.BoringSimple);
             
             // delete
@@ -137,7 +138,7 @@ namespace usubot.End2EndTests
             
             // check
             getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            values = JsonConvert.DeserializeObject<LessonSignalDto[]>(getResponse);
+            values = ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(0);
         }
 
@@ -172,6 +173,17 @@ namespace usubot.End2EndTests
             {
                 yield return row[0].ToString();
             }
+        }
+        
+        private T ParseJson<T>(string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                }
+            });
         }
     }
 }
