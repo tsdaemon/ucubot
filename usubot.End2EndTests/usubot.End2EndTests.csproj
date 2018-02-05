@@ -13,4 +13,10 @@
     <PackageReference Include="NUnit.Runners" Version="3.7.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ucubot\ucubot.csproj">
+      <Project>{F46D0CC3-B87E-478B-B5DA-6DF2988FC927}</Project>
+      <Name>ucubot</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
