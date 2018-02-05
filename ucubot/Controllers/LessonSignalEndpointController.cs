@@ -45,8 +45,9 @@ namespace ucubot.Controllers
                 var lessonSignalDto = new LessonSignalDto
                 {
                     UserId = (string) row["user_id"],
-                    Timestamp = (DateTime) (row["timestamp"]),
-                    Type = ((string) row["signal_type"]).ConvertSlackMessageToSignalType()
+                    Timestamp = Convert.ToDateTime(row["timestamp"]),
+                    Type = (LessonSignalType) row["signal_type"],
+                    Id = (int) row["id"]
                 };
                 lessonSignalDtos.Add(lessonSignalDto);
             }
@@ -81,8 +82,9 @@ namespace ucubot.Controllers
             var lessonSignalDto = new LessonSignalDto
             {
                 UserId = (string) row["user_id"],
-                Timestamp = (DateTime) row["timestamp"],
-                Type = ((string) row["signal_type"]).ConvertSlackMessageToSignalType()
+                Timestamp = Convert.ToDateTime(row["timestamp"]),
+                Type = (LessonSignalType) row["signal_type"],
+                Id = (int) row["id"]
             };
             return lessonSignalDto;
         }
