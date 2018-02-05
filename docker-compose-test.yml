@@ -1,9 +1,15 @@
 version: "3"
 services:
-    web:
+    test:
         build:
             context: .
             dockerfile: Dockerfile-test
+        depends_on:
+            - app
+    app:
+        build: ./ucubot
+        ports:
+            - "80"
         depends_on:
             - db
     db:
