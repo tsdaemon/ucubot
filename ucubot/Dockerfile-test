@@ -2,7 +2,7 @@ FROM microsoft/aspnetcore-build:2.0
 ADD . /app
 WORKDIR /app
 RUN ["rm", "appsettings.Db.json"]
-RUN ["mv", "appsettings.Db.docker.json", "appsettings.Db.json"]
+RUN ["mv", "appsettings.Db.test.json", "appsettings.Db.json"]
 RUN ["dotnet", "restore"]
 RUN ["dotnet", "build"]
 
