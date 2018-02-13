@@ -63,7 +63,8 @@ namespace ucubot.Controllers
             var dataTable = new DataTable();
             try
             {
-                var cmd = new MySqlCommand("SELECT * FROM lesson_signal WHERE id=" + id, cnn);
+                var cmd = new MySqlCommand("SELECT * FROM lesson_signal WHERE id=@id", cnn);
+                cmd.Parameters.AddWithValue("@id", id);
                 var da = new MySqlDataAdapter(cmd);
                 da.Fill(dataTable);
             }
@@ -128,8 +129,9 @@ namespace ucubot.Controllers
             {
                 Console.WriteLine("Connecting to MySQL...");
                 cnn.Open();
-                var cmd = new MySqlCommand("DELETE FROM lesson_signal WHERE id=" + id,
+                var cmd = new MySqlCommand("DELETE FROM lesson_signal WHERE id=@id",
                     cnn);
+                cmd.Parameters.AddWithValue("@id", id);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
