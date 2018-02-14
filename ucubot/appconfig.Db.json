@@ -1,5 +1,0 @@
-{
-  "ConnectionStrings": {
-    "BotDatabase": "server=127.0.0.1;uid=ucubot_user;pwd=1234;database=ucubot;"
-  }
-}
