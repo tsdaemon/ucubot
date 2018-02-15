@@ -2,7 +2,7 @@ USE ucubot;
 
 CREATE TABLE lesson_signal (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    Timestamp DATETIME,
+    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     SignalType INT,
     UserId TEXT,
     primary key (id)

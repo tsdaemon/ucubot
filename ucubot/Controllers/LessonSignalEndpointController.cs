@@ -59,7 +59,7 @@ namespace ucubot.Controllers
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var conn = new MySqlConnection(connectionString);
-            var query = "select * from lesson_signal where id = @id";
+            var query = $"select * from lesson_signal where id = {id}";
             var dt = new DataTable();
             var cmd = new MySqlCommand(query, conn);
             conn.Open();
@@ -89,8 +89,7 @@ namespace ucubot.Controllers
             var conn = new MySqlConnection(connectionString);
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
-            var timeStamp = DateTime.Now.ToString();
-            var cmd = new MySqlCommand("INSERT INTO lesson_signal (UserId, SignalType, Timestamp) VALUES ('@userId', '@signalType', '@timeStamp');", conn);
+            var cmd = new MySqlCommand($"INSERT INTO lesson_signal (UserId, SignalType) VALUES ('{userId}', '{(int) signalType}');", conn);
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
@@ -103,7 +102,7 @@ namespace ucubot.Controllers
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var conn = new MySqlConnection(connectionString);
-            var cmd = new MySqlCommand("DELETE FROM lesson_signal WHERE id = @id", conn);
+            var cmd = new MySqlCommand($"DELETE FROM lesson_signal WHERE id = {id}", conn);
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
