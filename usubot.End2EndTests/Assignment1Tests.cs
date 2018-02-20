@@ -141,6 +141,38 @@ namespace usubot.End2EndTests
             values = ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(0);
         }
+        
+        [Test, Order(4)]
+        public async Task TestSqlInjectionFail()
+        {
+            // check is empty
+            var getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
+            var values = ParseJson<LessonSignalDto[]>(getResponse);
+            values.Length.Should().Be(0);
+            
+            // create
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("user_id", "U111"),
+                new KeyValuePair<string, string>("text", "simple")
+            });
+            var createResponse = await _client.PostAsync("/api/LessonSignalEndpoint", content);
+            createResponse.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            
+            // create another with attack
+            content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("user_id", "U111', 0); DELETE FROM lesson_signal; #"),
+                new KeyValuePair<string, string>("text", "simple")
+            });
+            createResponse = await _client.PostAsync("/api/LessonSignalEndpoint", content);
+            createResponse.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            
+            // check
+            getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
+            values = ParseJson<LessonSignalDto[]>(getResponse);
+            values.Length.Should().Be(2);
+        }
 
         [TearDown]
         public void Done()
