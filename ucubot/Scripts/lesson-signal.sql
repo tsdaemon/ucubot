@@ -1,0 +1,1 @@
+Create table LessonSignal(Id long, Timestamp DATE, SignalType int, UserId VARCHAR(20));
