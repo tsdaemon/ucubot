@@ -167,6 +167,8 @@ namespace ucubot.Controllers
                 
                 var myCommand = new MySqlCommand("DELETE FROM lesson_signal WHERE Id=" + id + ";", myConnection);
 
+                myCommand.ExecuteNonQuery();
+
                 return Accepted();
             }
         }
