@@ -63,15 +63,11 @@ namespace ucubot.Controllers
                         UserId = (string) row["UserId"]
                     };
 
-
                     obj.Add(currDto);
                 }
 
             }
 
-//                (d) Return all LessonSignalDto objects stored in any IEnumerable
-//            container: List, array, iterator etc.
-//                (e) Do not forget to close your connection.
             return obj;
         }
 
