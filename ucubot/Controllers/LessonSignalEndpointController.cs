@@ -36,7 +36,7 @@ namespace ucubot.Controllers
             var result = new List<LessonSignalDto>();
             if (dt.Rows.Count == 0)
             {
-                return null;
+                return result;
             }
             
             foreach(DataRow row in dt.Rows)
