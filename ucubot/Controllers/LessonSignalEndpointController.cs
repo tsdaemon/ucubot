@@ -87,7 +87,7 @@ namespace ucubot.Controllers
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var conn = new MySqlConnection(connectionString);
-            var userId = message.user_id;
+            var userId = message.user_id.Replace("'", "''");
             var signalType = message.text.ConvertSlackMessageToSignalType();
             var cmd = new MySqlCommand($"INSERT INTO lesson_signal (UserId, SignalType) VALUES ('{userId}', '{(int) signalType}');", conn);
             conn.Open();
