@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "BotDatabase": "Server=http://localhost:5000/;Database=ucubot;Uid=me;Pwd=pass;"
+    "BotDatabase": "Server=localhost;Database=ucubot;Uid=me;Pwd=pass"
   }
 }
