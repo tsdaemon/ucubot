@@ -14,6 +14,8 @@ namespace ucubot.Controllers
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
+        
+        private DataTable _dataTable = new DataTable();
 
         public LessonSignalEndpointController(IConfiguration configuration)
         {
@@ -24,8 +26,34 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            // TODO: add query to get all signals
-            return new LessonSignalDto[0];
+
+            var LessonSignalArray = new List<LessonSignalDto>();
+
+            var conn = new MySqlConnection(connectionString);
+            var query = "SELECT * FROM LessonSignal;";
+            var cmd = new MySqlCommand(query);
+            
+            conn.Open();
+
+            using (var adapter = new MySqlDataAdapter(cmd))
+            {
+                adapter.Fill(_dataTable);
+
+                foreach (DataRow row in _dataTable.Rows)
+                {
+                    LessonSignalArray.Add(new LessonSignalDto
+                    {
+                        Id = (int) row["ID"],
+                        Timestamp = (DateTime) row["Timestamp_"],
+                        Type = (LessonSignalType) row["SignalType"],
+                        UserId = row["UserID"].ToString()
+                    });
+                }
+            }
+
+            conn.Close();
+            
+            return LessonSignalArray;
         }
         
         [HttpGet("{id}")]
