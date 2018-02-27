@@ -65,8 +65,24 @@ namespace ucubot.Controllers
             MySqlConnection conn = new MySqlConnection(connectionString);
             MySqlCommand cmd = new MySqlCommand(query, conn);
             conn.Open();
+            // create data adapter
+            var adapter =  new MySqlDataAdapter(cmd);
+            var dataSet = new DataSet();
+           
+            // this will query your database and return the result to your datatable
+            adapter.Fill(dataSet, "lesson_signal");
+            if (dataSet.Tables[0].Rows.Count < 1)
+                return null;
+            var dataRow = dataSet.Tables[0].Rows[0];
+            var lessonSignalDto = new LessonSignalDto{
+                
+                Timestamp = (DateTime)dataRow["timestamp_"],
+                Type = (LessonSignalType)Convert.ToInt32(dataRow["signal_type"]),
+                UserId = (string)dataRow["user_id"]
+                    
+            };
             
-            return null;
+            return lessonSignalDto;
         }
         
         [HttpPost]
