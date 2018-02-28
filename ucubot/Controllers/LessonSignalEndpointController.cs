@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using ucubot.Model;
@@ -62,6 +63,7 @@ namespace ucubot.Controllers
             {
                 if (res.Rows.Count < 1)
                 {
+                    Response.StatusCode = 404;
                     return null;
                 }
 
@@ -79,26 +81,21 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            Console.WriteLine("start");
-
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
-
-            Console.WriteLine(message);
-            Console.WriteLine(userId);
-            Console.WriteLine(signalType);
 
             var connection = new MySqlConnection(_configuration.GetConnectionString("BotDatabase"));
             connection.Open();
 
             var command =
-                new MySqlCommand("INSERT INTO lesson_signal (signal_type, user_id) VALUES (@userId, @signalType)",
+                new MySqlCommand("INSERT INTO lesson_signal (signal_type, user_id) VALUES (@signalType, @userId)",
                     connection);
             command.Parameters.Add(new MySqlParameter("userId", userId));
             command.Parameters.Add(new MySqlParameter("signalType", signalType));
 
             command.ExecuteNonQuery();
 
+            Response.StatusCode = 201;
             return Accepted();
         }
 
