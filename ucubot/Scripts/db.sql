@@ -1,4 +1,4 @@
-CREATE SCHEMA 'ucubot';
+CREATE DATABASE ucubot;
 
 CREATE USER 'ucubot_user'@'%' IDENTIFIED BY '1234';
 
