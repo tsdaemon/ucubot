@@ -24,7 +24,28 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            
+            var cnn = new MySqlConnection(connectionString);
+            try
+            {
+                cnn.Open();
+                Console.WriteLine("Connection Open ! ");
+
+                var dataTable = "SELECT * FROM lesson_signal";
+                var cmd = new MySqlCommand(dataTable, cnn);
+                var rdr = cmd.ExecuteReader();                
+                
+                while (rdr.Read()) 
+                {
+                    Console.WriteLine(rdr.GetInt32(0) + ": " 
+                                                      + rdr.GetString(1));
+                }
+                
+                cnn.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Can not open connection ! ");
+            }
             //TODO: replace with database query
             return new LessonSignalDto[0];
         }
