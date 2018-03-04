@@ -100,24 +100,34 @@ namespace ucubot.Controllers
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
             var userId = message.user_id;
-            var signalType = message.text.ConvertSlackMessageToSignalType();
-
-            // TODO: add insert command to store signal
-            using (MySqlConnection connection = new MySqlConnection())
+            try
             {
-                connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
-                connection.Open();
-                MySqlCommand command = new MySqlCommand(String.Format("INSERT INTO lesson_signal(SignalType, UserId), VALUES({0}, {1})", signalType, userId), connection);
-                command.ExecuteScalar();
+                var signalType = message.text.ConvertSlackMessageToSignalType();
+                using (MySqlConnection connection = new MySqlConnection())
+                {
+                    connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
+                    connection.Open();
+                    MySqlCommand command = new MySqlCommand(String.Format("INSERT INTO lesson_signal(SignalType, UserId) VALUES({0}, {1})", (int)signalType, userId), connection);
+                    await command.ExecuteNonQueryAsync();
+                    return Accepted();
+                }
+
+            }
+            catch (CanNotParseSlackCommandException e)
+            {
+                Console.Out.WriteLine(e.Message);
+                return BadRequest();
             }
 
-            return Accepted();
+            // TODO: add insert command to store signal
+            
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
             //TODO: add delete command to remove signal
+            
             return Accepted();
         }
     }
