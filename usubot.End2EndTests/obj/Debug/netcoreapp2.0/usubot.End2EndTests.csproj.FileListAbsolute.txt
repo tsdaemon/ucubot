@@ -1,0 +1,15 @@
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\NUnit3.TestAdapter.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\nunit.engine.netstandard.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\Mono.Cecil.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\usubot.End2EndTests.deps.json
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\usubot.End2EndTests.runtimeconfig.json
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\usubot.End2EndTests.runtimeconfig.dev.json
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\usubot.End2EndTests.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\usubot.End2EndTests.pdb
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\ucubot.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\bin\Debug\netcoreapp2.0\ucubot.pdb
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\obj\Debug\netcoreapp2.0\usubot.End2EndTests.csproj.CoreCompileInputs.cache
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\obj\Debug\netcoreapp2.0\usubot.End2EndTests.AssemblyInfoInputs.cache
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\obj\Debug\netcoreapp2.0\usubot.End2EndTests.AssemblyInfo.cs
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\obj\Debug\netcoreapp2.0\usubot.End2EndTests.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\usubot.End2EndTests\obj\Debug\netcoreapp2.0\usubot.End2EndTests.pdb

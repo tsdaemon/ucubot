@@ -1,0 +1,10 @@
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\bin\Debug\netcoreapp2.0\ucubot.deps.json
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\bin\Debug\netcoreapp2.0\ucubot.runtimeconfig.json
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\bin\Debug\netcoreapp2.0\ucubot.runtimeconfig.dev.json
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\bin\Debug\netcoreapp2.0\ucubot.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\bin\Debug\netcoreapp2.0\ucubot.pdb
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\obj\Debug\netcoreapp2.0\ucubot.csproj.CoreCompileInputs.cache
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\obj\Debug\netcoreapp2.0\ucubot.AssemblyInfoInputs.cache
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\obj\Debug\netcoreapp2.0\ucubot.AssemblyInfo.cs
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\obj\Debug\netcoreapp2.0\ucubot.dll
+C:\Users\Macros-PC\Desktop\Temp\2курс\Database\ucubot\ucubot\obj\Debug\netcoreapp2.0\ucubot.pdb
