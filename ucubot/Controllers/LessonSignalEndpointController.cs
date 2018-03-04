@@ -75,7 +75,7 @@ namespace ucubot.Controllers
             {
                 LessonSignalDto lesson = new LessonSignalDto();
                 lesson.UserId = (string) element["user_id"];
-                lesson.Type = SignalTypeUtils.ConvertSlackMessageToSignalType((string) element["signal_type"]);
+                lesson.Type = (int) element["signal_type"];
                 lesson.Timestamp = Convert.ToDateTime(element["timestamp"]);
                 lesson.Id = (int) element["id"];
                 return lesson;
