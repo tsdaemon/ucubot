@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -91,13 +91,14 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            var curTime = string.Format("{0:HH:mm:ss tt}", DateTime.Now);
+            var curTime = string.Format("{0:HH:mm:ss tt}", DateTime.Now).ToString();
             var userId = message.user_id;
-            var signalType = message.text.ConvertSlackMessageToSignalType();
+            var signalType = (int)message.text.ConvertSlackMessageToSignalType();
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var con = new MySqlConnection(connectionString);
-            var com = new MySqlCommand("INSERT INTO lesson_signal (timestamp, signal_type, user_id VALUES (@timestamp, @signal_type, @user_id))", con);
-            com.Parameters.AddWithValue("@timestamp", curTime);
+            var com = new MySqlCommand("INSERT INTO lesson_signal (timestamp, signal_type, user_id) VALUES (@timestamp," +
+                                       " @signal_type, @user_id);", con);
+            com.Parameters.AddWithValue("@timestamp", DateTime.Now);
             com.Parameters.AddWithValue("@signal_type", signalType);
             com.Parameters.AddWithValue("@user_id", userId);
             try
