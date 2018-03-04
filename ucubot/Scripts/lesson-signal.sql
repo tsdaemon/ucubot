@@ -1,0 +1,1 @@
+CREATE TABLE lesson_signal (Id bigint, Timestamp DATETIME, SignalType int, UserId VARCHAR(45));
