@@ -24,15 +24,68 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            // TODO: add query to get all signals
-            return new LessonSignalDto[0];
+            var con = new MySqlConnection(connectionString);
+            var com = new MySqlCommand("SELECT * FROM lesson_signal", con);
+            var datTab = new DataTable();
+            
+            try
+            {
+                con.Open();
+                var datAd = new MySqlDataAdapter(com);
+                datAd.Fill(datTab);
+                datAd.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+          
+            foreach (DataRow row in datTab.Rows)
+            {
+                var lesSigDto = new LessonSignalDto
+                {
+                    Id = (int) row["id"],
+                    Timestamp = (DateTime) row["timestamp"],
+                    Type = (LessonSignalType) row["signal_type"],
+                    UserId = (string) row["user_id"]
+                };
+                yield return lesSigDto;
+            }
+            con.Close();
         }
         
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {
-            // TODO: add query to get a signal by the given id
-            return null;
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var con = new MySqlConnection(connectionString);
+            var com = new MySqlCommand("SELECT * FROM lesson_signal WHERE id=@id", con);
+            com.Parameters.AddWithValue("@id", id);
+            var datTab = new DataTable();
+            
+            try
+            {   
+                con.Open();
+                var datAd = new MySqlDataAdapter(com);
+                datAd.Fill(datTab);
+                datAd.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            if (datTab.Rows.Count <= 0) return null;
+            var row = datTab.Rows[0];
+            con.Close();
+            return new LessonSignalDto
+            {
+                Id = (int) row["id"],
+                Timestamp = (DateTime) row["timestamp"],
+                Type = (LessonSignalType) row["signal_type"],
+                UserId = (string) row["user_id"]
+            };
+
         }
         
         [HttpPost]
@@ -40,8 +93,11 @@ namespace ucubot.Controllers
         {
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
-
             // TODO: add insert command to store signal
+            
+            
+            
+            
             
             return Accepted();
         }
