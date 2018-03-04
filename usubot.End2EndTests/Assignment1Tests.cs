@@ -11,7 +11,7 @@
 //using MySql.Data.MySqlClient;
 //using Newtonsoft.Json;
 //using NUnit.Framework;
-//using ucubot.Model;
+//using ucubot.Model
 //
 //namespace usubot.End2EndTests
 //{

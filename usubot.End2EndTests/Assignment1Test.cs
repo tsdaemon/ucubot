@@ -17,8 +17,8 @@ namespace usubot.End2EndTests
     [TestFixture]
     public class Assignment1Test
     {
-        private const string CONNECTION_STRING_NODB = "Server=db;Uid=root;Pwd=1qaz2wsx";
-        private const string CONNECTION_STRING = "Server=db;Database=ucubot;Uid=root;Pwd=1qaz2wsx";
+        private const string CONNECTION_STRING_NODB = "Server=localhost;Uid=user;Pwd=password";
+        private const string CONNECTION_STRING = "Server=localhost;Database=ucubot;Uid=user;Pwd=password";
         
         [Test, Order(-10)]
         public void WaitForMysqlToStart()
@@ -99,7 +99,7 @@ namespace usubot.End2EndTests
 
         private string ReadMysqlScript(string scriptName)
         {
-            using (var reader = new StreamReader(File.OpenRead($"/app/ucubot/Scripts/{scriptName}.sql")))
+            using (var reader = new StreamReader(File.OpenRead($"../ucubot/Scripts/{scriptName}.sql")))
             {
                 return reader.ReadToEnd();
             }
