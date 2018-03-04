@@ -31,7 +31,7 @@ namespace ucubot.Controllers
             try
             {
                 conn.Open();
-                var sql = "SELECT * FROM lesson signal";
+                var sql = "SELECT * FROM lesson_signal";
                 var cmd = new MySqlCommand(sql, conn);
                 var dataAdapter = new MySqlDataAdapter(cmd);
                 dataAdapter.Fill(dataTable);
