@@ -91,21 +91,46 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
+            var curTime = string.Format("{0:HH:mm:ss tt}", DateTime.Now);
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
-            // TODO: add insert command to store signal
-            
-            
-            
-            
-            
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var con = new MySqlConnection(connectionString);
+            var com = new MySqlCommand("INSERT INTO lesson_signal (timestamp, signal_type, user_id VALUES (@timestamp, @signal_type, @user_id))", con);
+            com.Parameters.AddWithValue("@timestamp", curTime);
+            com.Parameters.AddWithValue("@signal_type", signalType);
+            com.Parameters.AddWithValue("@user_id", userId);
+            try
+            {   
+                con.Open();
+                com.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            con.Close();
             return Accepted();
         }
         
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            //TODO: add delete command to remove signal
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var con = new MySqlConnection(connectionString);
+            var com = new MySqlCommand("DELETE FROM lesson_signal WHERE id=@id", con);
+            com.Parameters.AddWithValue("@id", id);
+
+            try
+            {   
+                con.Open();
+                com.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            con.Close();
             return Accepted();
         }
     }
