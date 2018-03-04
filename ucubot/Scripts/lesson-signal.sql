@@ -1,2 +1,2 @@
 USE ucubot;
-CREATE TABLE lesson_signal (id LONG, timestamp DATETIME, signal_type INT, user_id VARCHAR(20));
+CREATE TABLE lesson_signal (id INT AUTO_INCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, signal_type INT, user_id VARCHAR(20), PRIMARY KEY (id));
