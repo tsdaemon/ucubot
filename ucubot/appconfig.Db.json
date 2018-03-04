@@ -1,5 +1,0 @@
-{
-	"ConnectionStrings": {
-		"BotDatabase": "Server=localhost; Database=ucubot; Uid=orenchuk; Pwd=orenchuky;"
-	}
-}
