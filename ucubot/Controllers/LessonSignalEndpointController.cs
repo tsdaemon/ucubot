@@ -91,17 +91,19 @@ namespace ucubot.Controllers
         {
             var userId = message.UserId;
             var signalType = message.Text.ConvertSlackMessageToSignalType();
+            
 
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
             connection.Open();
 
-            var newCommand = new MySqlCommand("INSERT INTO lesson_signal (user_id, signal_type) VALUES(@0, @1);");
+            var newCommand = new MySqlCommand("INSERT INTO lesson_signal (timestamp, signal_type, user_id) VALUES(@0, @1, @2);");
             var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            newCommand.Parameters.AddWithValue("@0",userId);
+            newCommand.Parameters.AddWithValue("@0",timestamp);
             newCommand.Parameters.AddWithValue("@1", signalType);
-            
-            
+            newCommand.Parameters.AddWithValue("@2", userId);
+            newCommand.ExecuteNonQuery();
+            connection.Close();
             
             
             return Accepted();
@@ -110,7 +112,15 @@ namespace ucubot.Controllers
         [HttpDelete]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            //TODO: add code to delete a record with the given id
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connection = new MySqlConnection(connectionString);
+            connection.Open();
+            
+            var newCommand = new MySqlCommand("DELETE FROM lesson_signal WHERE id=" + id);
+            newCommand.ExecuteNonQuery();
+            connection.Close();
+            
+            
             return Accepted();
         }
     }
