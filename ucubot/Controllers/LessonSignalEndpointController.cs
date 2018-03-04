@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using MySql.Data.MySqlClient;
 using ucubot.Model;
 
@@ -14,7 +17,8 @@ namespace ucubot.Controllers
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
-
+        private DataTable table = new DataTable();
+            
         public LessonSignalEndpointController(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -24,15 +28,61 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string sql = "SELECT * FROM lesson_signal;";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(table);
+
+            List<LessonSignalDto> lst = new List<LessonSignalDto>();
+            foreach (DataRow element in table.Rows)
+            {
+                LessonSignalDto lesson = new LessonSignalDto();
+                lesson.UserId = (string) element["user_id"];
+                lesson.Type = SignalTypeUtils.ConvertSlackMessageToSignalType((string) element["signal_type"]);
+                lesson.Timestamp = Convert.ToDateTime(element["timestamp"]);
+                lesson.Id = (int) element["id"];
+                lst.Add(lesson);
+            }
             
-            //TODO: replace with database query
-            return new LessonSignalDto[0];
+            connection.Close();
+            adapter.Dispose();
+            
+
+            return lst;
         }
         
         [HttpGet]
         public LessonSignalDto ShowSignal(long id)
         {   
-            //TODO: replace with database query
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connection = new MySqlConnection(connectionString);
+            connection.Open();
+            
+            string sql = "SELECT * FROM lesson_signal WHERE id=" + id;
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(table);
+
+            if (table.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            foreach (DataRow element in table.Rows)
+            {
+                LessonSignalDto lesson = new LessonSignalDto();
+                lesson.UserId = (string) element["user_id"];
+                lesson.Type = SignalTypeUtils.ConvertSlackMessageToSignalType((string) element["signal_type"]);
+                lesson.Timestamp = Convert.ToDateTime(element["timestamp"]);
+                lesson.Id = (int) element["id"];
+                return lesson;
+            }
+            
+            
+            
             return null;
         }
         
@@ -42,7 +92,17 @@ namespace ucubot.Controllers
             var userId = message.UserId;
             var signalType = message.Text.ConvertSlackMessageToSignalType();
 
-            //TODO: add code to store above values
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            var newCommand = new MySqlCommand("INSERT INTO lesson_signal (user_id, signal_type) VALUES(@0, @1);");
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            newCommand.Parameters.AddWithValue("@0",userId);
+            newCommand.Parameters.AddWithValue("@1", signalType);
+            
+            
+            
             
             return Accepted();
         }
