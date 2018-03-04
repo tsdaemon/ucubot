@@ -1,0 +1,4 @@
+CREATE DATABASE ucubot;
+CREATE USER 'ucubot'@'%' IDENTIFIED BY 'pass';
+GRANT ALL PRIVILEGES ON ucubot.* To 'ucubot'@'%';
+FLUSH PRIVILEGES;

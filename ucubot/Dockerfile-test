@@ -1,9 +1,8 @@
-FROM microsoft/aspnetcore-build:2.0
-ADD . /app
-WORKDIR /app
-RUN ["rm", "appsettings.Db.json"]
-RUN ["mv", "appsettings.Db.test.json", "appsettings.Db.json"]
-RUN ["dotnet", "restore"]
-RUN ["dotnet", "build"]
+FROM microsoft/aspnetcore-build:2.0 AS build-env
 
-ENTRYPOINT ["dotnet", "run", "--server.urls", "http://*:80"]
+ADD . /app
+WORKDIR /app/usubot.End2EndTests
+
+RUN dotnet restore
+
+ENTRYPOINT ["dotnet", "test", "-v", "m", "--filter", "TestCategory=Assignment1"]
