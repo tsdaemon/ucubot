@@ -118,8 +118,6 @@ namespace ucubot.Controllers
                 Console.Out.WriteLine(e.Message);
                 return BadRequest();
             }
-
-            // TODO: add insert command to store signal
             
         }
 
@@ -127,8 +125,14 @@ namespace ucubot.Controllers
         public async Task<IActionResult> RemoveSignal(long id)
         {
             //TODO: add delete command to remove signal
-            
-            return Accepted();
+            using (MySqlConnection connection = new MySqlConnection())
+            {
+                connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
+                connection.Open();
+                MySqlCommand command = new MySqlCommand(String.Format("DELETE FROM lesson_signal WHERE id={0}", id), connection);
+                await command.ExecuteNonQueryAsync();
+                return Accepted();
+            }
         }
     }
 }
