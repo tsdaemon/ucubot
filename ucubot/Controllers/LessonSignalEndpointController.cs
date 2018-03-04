@@ -41,8 +41,8 @@ namespace ucubot.Controllers
                 LessonSignalDto less = new LessonSignalDto();
                 less.Id = (int) row["id"];
                 less.UserId = (string) row["user_id"];
-                less.Type = SignalTypeUtils.ConvertSlackMessageToSignalType((string)row["signal_type"]) ;
-                less.Timestamp = Convert.ToDateTime(row["time_stamp"]);
+                less.Type = (int) row["signal_type"] ;
+                less.Timestamp = Convert.ToDateTime(row["timestamp"]);
                 lessonSignalDtos.Add(less);
             }
             connection.Close();
@@ -62,20 +62,25 @@ namespace ucubot.Controllers
             MySqlCommand cmd = new  MySqlCommand(query, connection);
             MySqlDataAdapter dataAdapter = new MySqlDataAdapter(cmd);
             dataAdapter.Fill(dataTable);
-            
+
+            if (dataTable.Rows.Count < 1)
+            {
+                return null;
+            }
             var row = dataTable.Rows[0];
             var lessonSignalDto = new LessonSignalDto
             {
                 UserId = (string) row["user_id"],
                 Timestamp = Convert.ToDateTime(row["timestamp"]),
-                Type = (LessonSignalType) row["signal_type"],
+                Type = (int) row["signal_type"],
                 Id = (int) row["id"]
             };
-            return lessonSignalDto;
             
             connection.Close();
             dataAdapter.Dispose();
-            return null;
+            return lessonSignalDto;
+            
+            
             
 
         }
