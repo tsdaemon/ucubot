@@ -25,7 +25,31 @@ namespace ucubot.Controllers
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             // TODO: add query to get all signals
-            return new LessonSignalDto[0];
+            using (MySqlConnection connection = new MySqlConnection())
+            {
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                
+                MySqlDataAdapter adapter = new MySqlDataAdapter("SELECT * FROM lesson_signal", connection);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                
+                List < LessonSignalDto> signals = new List<LessonSignalDto>();
+                foreach (DataRow row in table.Rows)
+                {
+                    signals.Add(
+                        new LessonSignalDto()
+                        {
+                            Id = (int) row["Id"],
+                            Timestamp = (DateTime) row["Timestamp"],
+                            Type = (LessonSignalType) (int) row["SignalType"],
+                            UserId = row["UserId"].ToString()
+                        }
+                    );
+                }
+                return signals;
+            }
+
         }
         
         [HttpGet("{id}")]
