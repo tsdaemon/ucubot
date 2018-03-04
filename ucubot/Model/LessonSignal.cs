@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ucubot.Model
+﻿namespace ucubot.Model
 {
     public enum LessonSignalType
     {

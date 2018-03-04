@@ -17,8 +17,8 @@ namespace usubot.End2EndTests
     [TestFixture]
     public class Assignment1Test
     {
-        private const string CONNECTION_STRING_NODB = "Server=localhost;Uid=user;Pwd=password";
-        private const string CONNECTION_STRING = "Server=localhost;Database=ucubot;Uid=user;Pwd=password";
+        private const string CONNECTION_STRING_NODB = "Server=localhost;Uid=root;Pwd=1qaz2wsx";
+        private const string CONNECTION_STRING = "Server=localhost;Database=ucubot;Uid=root;Pwd=1qaz2wsx";
         
         [Test, Order(-10)]
         public void WaitForMysqlToStart()
