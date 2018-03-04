@@ -23,14 +23,7 @@ namespace ucubot.Controllers
         [HttpGet]
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
-            var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var connection = new MySqlConnection(connectionString);
-            connection.Open();
-
-            var dataTable = new DataTable();
-            var queryCommand = new MySqlCommand("select * from lesson_signal", connection);
-            var adapter = new MySqlDataAdapter(queryCommand);
-            adapter.Fill(dataTable);
+            var dataTable = GetDataTable("select * from lesson_signal");
 
             IEnumerable<LessonSignalDto> lessonSignalDtos = new List<LessonSignalDto>();
 
@@ -53,14 +46,7 @@ namespace ucubot.Controllers
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {
-            var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var connection = new MySqlConnection(connectionString);
-            connection.Open();
-
-            var dataTable = new DataTable();
-            var queryCommand = new MySqlCommand($"select * from lesson_signal where id={id}", connection);
-            var adapter = new MySqlDataAdapter(queryCommand);
-            adapter.Fill(dataTable);
+            var dataTable = GetDataTable($"select * from lesson_signal where id={id}");
 
             if (dataTable.Rows.Count == 0)
             {
@@ -83,23 +69,29 @@ namespace ucubot.Controllers
         {
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
-            var timeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
-            connection.Open();
+            
 
-            connection.Open();
-            var command = connection.CreateCommand();
-            command.CommandText = "insert into lesson_signal value(null, @time_stamp, @signal_type, @userID);";
-            command.Parameters.Add(new MySqlParameter("time_stamp", timeStamp));
-            command.Parameters.Add(new MySqlParameter("signal_type", signalType));
-            command.Parameters.Add(new MySqlParameter("user_id", userId));
+                var command = connection.CreateCommand();
+                command.CommandText =
+                    "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@user_id, @signal_type)";
+                command.Parameters.Add(new MySqlParameter("signal_type", signalType));
+                command.Parameters.Add(new MySqlParameter("user_id", userId));
 
-            await command.ExecuteNonQueryAsync();
-            connection.Close();
+            try
+            {
+                await command.ExecuteNonQueryAsync();
+                connection.Open();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
-            return Accepted(); // "insert into lesson_signal value(null, {timeStamp}, {signalType}, {userId});
+            return Accepted();
         }
 
         [HttpDelete("{id}")]
@@ -107,17 +99,50 @@ namespace ucubot.Controllers
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
-            connection.Open();
 
-            connection.Open();
+            
             var command = connection.CreateCommand();
             command.CommandText = "DELETE FROM lesson_signal WHERE ID = @id;";
-
             command.Parameters.Add(new MySqlParameter("id", id));
 
-            await command.ExecuteNonQueryAsync();
-            connection.Close();
+            try
+            {
+                connection.Open();
+                await command.ExecuteNonQueryAsync();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             return Accepted();
+        }
+
+        [HttpGet]
+        private DataTable GetDataTable(string cmdText)
+        {
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            var dataTable = new DataTable();
+            var queryCommand = new MySqlCommand(cmdText, connection);
+            var adapter = new MySqlDataAdapter(queryCommand);
+
+            try
+            {
+                adapter.Fill(dataTable);
+                connection.Close();
+                adapter.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+
+            return dataTable;
         }
     }
 }
