@@ -1,6 +1,6 @@
 USE ucubot;
 CREATE TABLE lesson_signal (
-     id BIGINT NOT NULL AUTO_INCREMENT,
+     id INT NOT NULL AUTO_INCREMENT,
      time_stamp DATETIME DEFAULT CURRENT_TIMESTAMP,
      signal_type INT,
      user_id VARCHAR(255) NOT NULL,
