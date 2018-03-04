@@ -129,9 +129,31 @@ namespace ucubot.Controllers
             {
                 connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
                 connection.Open();
-                MySqlCommand command = new MySqlCommand(String.Format("DELETE FROM lesson_signal WHERE id={0}", id), connection);
-                await command.ExecuteNonQueryAsync();
-                return Accepted();
+                MySqlCommand command = new MySqlCommand(String.Format("SELECT * FROM lesson_signal WHERE id={0}", id),
+                    connection);
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                {
+                    using (DataTable table = new DataTable())
+                    {
+                        adapter.Fill(table);
+                        try
+                        {
+                            DataRow row = table.Rows[0];
+                            MySqlCommand deleteCommand = new MySqlCommand(String.Format("DELETE FROM lesson_signal WHERE id={0}", id), connection);
+                            await deleteCommand.ExecuteNonQueryAsync();
+                            return Accepted();
+                                       
+                        }
+                        catch (IndexOutOfRangeException e)
+                        {
+                            Console.Out.WriteLine(e.Message);
+                            return BadRequest();
+                        }
+
+
+                    }
+                }
+                
             }
         }
     }
