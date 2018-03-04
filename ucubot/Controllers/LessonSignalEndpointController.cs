@@ -28,7 +28,7 @@ namespace ucubot.Controllers
             //TODO: replace with database query
             const string query = "select * from lesson_signal";
 
-            using (var conn = new MySqlConnection(_configuration.GetConnectionString("BotDatabase")))
+            using (var conn = new MySqlConnection(connectionString))
             {
                 var cmd = new MySqlCommand(query, conn);
                 conn.Open();
