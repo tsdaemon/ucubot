@@ -14,8 +14,6 @@ namespace ucubot.Controllers
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
-
-        private DataTable dataTable = new DataTable();
         
         public LessonSignalEndpointController(IConfiguration configuration){
             _configuration = configuration;
@@ -23,17 +21,18 @@ namespace ucubot.Controllers
 
         [HttpGet]
         public IEnumerable<LessonSignalDto> ShowSignals(){
+            var dataTable = new DataTable();
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var query = "SELECT * FROM lesson_signal";
             var conn = new MySqlConnection(connectionString);
-            var cmd = new MySqlCommand(query, conn);
-            
             conn.Open();
+            var cmd = new MySqlCommand(query, conn);
             
             var adapter = new MySqlDataAdapter(cmd);
      
             adapter.Fill(dataTable);
-
+            conn.Close();
+            
             var list = new List<LessonSignalDto>();
             
             foreach (DataRow row in dataTable.Rows){
@@ -45,15 +44,41 @@ namespace ucubot.Controllers
                 });
             }
             
-            conn.Close();
             
             return list;
         }
         
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id){
-            // TODO: add query to get a signal by the given id
-            return null;
+            var dataTable = new DataTable();
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            
+            var query = "SELECT * FROM lesson_signal WHERE id = @id";
+            var conn = new MySqlConnection(connectionString);
+            conn.Open();
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", id);            
+            
+            var adapter = new MySqlDataAdapter(cmd);
+            
+            adapter.Fill(dataTable);
+
+            conn.Close();
+            
+            if (dataTable.Rows.Count == 0){
+                return null;
+            }
+            
+            var row = dataTable.Rows[0];
+
+            var signalDto = new LessonSignalDto
+            {
+                Timestamp = (DateTime) row["time_stamp"],
+                Type = (LessonSignalType) row["signal_type"],
+                UserId = (string) row["user_id"]
+            };
+                
+            return signalDto;
         }
         
         [HttpPost]
@@ -61,14 +86,30 @@ namespace ucubot.Controllers
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
 
-            // TODO: add insert command to store signal
-            
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var query = "INSERT INTO lesson_signal (time_stamp, user_id, signal_type) VALUES (NOW(), @userId, @signalType)";
+            var conn = new MySqlConnection(connectionString);
+            conn.Open();
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@userId", userId); 
+            cmd.Parameters.AddWithValue("@signalType", signalType);     
+            await cmd.ExecuteNonQueryAsync();
+            conn.Close();
             return Accepted();
         }
         
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id){
             //TODO: add delete command to remove signal
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var query = "DELETE FROM lesson_signal WHERE id = @id";
+            var conn = new MySqlConnection(connectionString);
+            conn.Open();
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", id);    
+            await cmd.ExecuteNonQueryAsync();
+            conn.Close();
+            
             return Accepted();
         }
     }
