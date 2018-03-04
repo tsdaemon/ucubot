@@ -1,10 +1,23 @@
 version: "3"
 services:
+<<<<<<< HEAD
     web:
+=======
+    test:
+>>>>>>> master
         build:
             context: .
             dockerfile: Dockerfile-test
         depends_on:
+<<<<<<< HEAD
+=======
+            - app
+    app:
+        build: ./ucubot
+        ports:
+            - "80"
+        depends_on:
+>>>>>>> master
             - db
     db:
         image: "mysql:5.7"
