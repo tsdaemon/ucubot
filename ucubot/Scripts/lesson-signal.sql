@@ -1,1 +1,2 @@
-CREATE TABLE lesson_signal (Id bigint, Timestamp DATETIME, SignalType int, UserId VARCHAR(45));
+USE ucubot;
+CREATE TABLE lesson_signal (Id int, Timestamp DATETIME, SignalType int, UserId VARCHAR(45));
