@@ -1,0 +1,10 @@
+/home/max/Desktop/databases/ucubot-learning/ucubot/bin/Debug/netcoreapp2.0/ucubot.deps.json
+/home/max/Desktop/databases/ucubot-learning/ucubot/bin/Debug/netcoreapp2.0/ucubot.runtimeconfig.json
+/home/max/Desktop/databases/ucubot-learning/ucubot/bin/Debug/netcoreapp2.0/ucubot.runtimeconfig.dev.json
+/home/max/Desktop/databases/ucubot-learning/ucubot/bin/Debug/netcoreapp2.0/ucubot.dll
+/home/max/Desktop/databases/ucubot-learning/ucubot/bin/Debug/netcoreapp2.0/ucubot.pdb
+/home/max/Desktop/databases/ucubot-learning/ucubot/obj/Debug/netcoreapp2.0/ucubot.csproj.CoreCompileInputs.cache
+/home/max/Desktop/databases/ucubot-learning/ucubot/obj/Debug/netcoreapp2.0/ucubot.AssemblyInfoInputs.cache
+/home/max/Desktop/databases/ucubot-learning/ucubot/obj/Debug/netcoreapp2.0/ucubot.AssemblyInfo.cs
+/home/max/Desktop/databases/ucubot-learning/ucubot/obj/Debug/netcoreapp2.0/ucubot.dll
+/home/max/Desktop/databases/ucubot-learning/ucubot/obj/Debug/netcoreapp2.0/ucubot.pdb
