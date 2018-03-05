@@ -27,36 +27,40 @@ namespace ucubot.Controllers
             // TODO: add query to get all signals
             var query = "SELECT * FROM lesson_signal";
             var conn = new MySqlConnection(connectionString); 
-            
-            conn.Open();
+            var dataTable = new DataTable();
             var cmd = new MySqlCommand(query, conn);
-            
-
-            // create data adapter
             var da = new MySqlDataAdapter(cmd);
-            var dataSet = new DataSet();
-            // this will query your database and return the result to your datatable
-            da.Fill(dataSet, "lesson_signal");
-            conn.Close();
-            
+            try
+            {
+                conn.Open();
+                da.Fill(dataTable);
+                conn.Close();
+            }
+            catch
+            {
+                
+            }
             //initialize list of objects
             
-            foreach(DataRow row in dataSet.Tables[0].Rows)
+            var enumerable = new List<LessonSignalDto>();
+            
+            foreach(DataRow row in dataTable.Rows)
             {
                 var obj = new LessonSignalDto
                 {
-                    Id = (int)row["Id"],
-                    UserId = (string)row["UserId"],
-                    Type = (LessonSignalType)row["SignalType"],
-                    Timestamp = (DateTime)row["Timestamp"]
+                    Id = (int)row["id"],
+                    UserId = (string)row["user_id"],
+                    Type = (LessonSignalType)row["signal_type"],
+                    Timestamp = (DateTime)row["time_stamp"]
                 };
                 // add object to list
-                yield return obj;
+                enumerable.Add(obj);
             }
-            
+
+            return enumerable;
             /**/
-            da.Dispose();
-            
+
+
             // return list of objects
             //return new LessonSignalDto[0];
         }
@@ -64,50 +68,45 @@ namespace ucubot.Controllers
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {
-            // TODO: add query to get a signal by the given id
+            // 
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            // TODO: add query to get all signals
-            var query = "SELECT * FROM lesson_signal WHERE id=" + id.ToString();
+            // 
+            var query = "SELECT * FROM lesson_signal WHERE id=@id";
             
             var conn = new MySqlConnection(connectionString);
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("id", id);
+            var da = new MySqlDataAdapter(cmd);
+            var dataTable = new DataTable();
             try
             {
                 conn.Open();
-                var cmd = new MySqlCommand(query, conn);
-//            cmd.Parameters.AddWithValue("id", id);
-
-
-                // create data adapter
-                var da = new MySqlDataAdapter(cmd);
-                var dataSet = new DataSet();
-                // this will query your database and return the result to your datatable
-                da.Fill(dataSet, "lesson_signal");
+                da.Fill(dataTable);
                 conn.Close();
-
-                //initialize list of objects
-
-                foreach (DataRow row in dataSet.Tables[0].Rows)
-                {
-                    var obj = new LessonSignalDto
-                    {
-                        Id = (int) row["Id"],
-                        UserId = (string) row["UserId"],
-                        Type = (LessonSignalType) row["SignalType"],
-                        Timestamp = (DateTime) row["Timestamp"]
-                    };
-                    // add object to list
-                    return obj;
-                }
-
-                /**/
-                da.Dispose();
             }
             catch
             {
                 
             }
+            //initialize list of objects
 
-            return null;
+            if (dataTable.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            var obj = new LessonSignalDto
+            {
+                Timestamp = (DateTime) dataTable.Rows[0]["time_stamp"],
+                Type = (LessonSignalType) dataTable.Rows[0]["signal_type"],
+                UserId = (string) dataTable.Rows[0]["user_id"]
+            };
+
+            
+
+            /**/
+            return obj;
+
         }
         
         [HttpPost]
@@ -116,16 +115,15 @@ namespace ucubot.Controllers
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var query = "INSERT INTO lesson_signal (UserId, SignalType) VALUES ("+userId+", "+signalType+");";
+            var query = "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@userId, @signalType);";
             var conn = new MySqlConnection(connectionString);
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("userId",userId);
+            cmd.Parameters.AddWithValue("signalType", signalType);
             try
             {
                 conn.Open();
-                var cmd = new MySqlCommand(query, conn);
-//            cmd.Parameters.AddWithValue("UserId",userId);
-//            cmd.Parameters.AddWithValue("SignalType", signalType);
-
-                await cmd.ExecuteNonQueryAsync();
+                cmd.ExecuteNonQuery();
                 conn.Close();
             }
             catch
@@ -144,13 +142,14 @@ namespace ucubot.Controllers
         {
             //TODO: add delete command to remove signal
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var query = "DELETE FROM lesson_signal WHERE id="+id+";";
+            var query = "DELETE FROM lesson_signal WHERE id=@id";
+            var conn = new MySqlConnection(connectionString);
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("id", id);
             try
             {
-                var conn = new MySqlConnection(connectionString);
-                var cmd = new MySqlCommand(query, conn);
-//            cmd.Parameters.AddWithValue("id", id);
-                await cmd.ExecuteNonQueryAsync();
+                conn.Open();
+                cmd.ExecuteNonQuery();
                 conn.Close();
             }
             catch
