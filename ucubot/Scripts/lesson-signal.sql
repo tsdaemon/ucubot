@@ -4,3 +4,4 @@ CREATE TABLE lesson_signal (
     signal_type INTEGER,
     user_id varchar(255) NOT NULL
 );
+
