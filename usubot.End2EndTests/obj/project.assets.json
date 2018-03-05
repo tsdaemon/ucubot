@@ -14178,23 +14178,23 @@
     ]
   },
   "packageFolders": {
-    "/home/firex/.nuget/packages/": {},
-    "/usr/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "C:\\Users\\User2\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/usubot.End2EndTests/usubot.End2EndTests.csproj",
+      "projectUniqueName": "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\usubot.End2EndTests\\usubot.End2EndTests.csproj",
       "projectName": "usubot.End2EndTests",
-      "projectPath": "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/usubot.End2EndTests/usubot.End2EndTests.csproj",
-      "packagesPath": "/home/firex/.nuget/packages/",
-      "outputPath": "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/usubot.End2EndTests/obj/",
+      "projectPath": "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\usubot.End2EndTests\\usubot.End2EndTests.csproj",
+      "packagesPath": "C:\\Users\\User2\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\usubot.End2EndTests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/share/dotnet/sdk/NuGetFallbackFolder"
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/home/firex/.config/NuGet/NuGet.Config"
+        "C:\\Users\\User2\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -14205,8 +14205,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/ucubot/ucubot.csproj": {
-              "projectPath": "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/ucubot/ucubot.csproj"
+            "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\ucubot\\ucubot.csproj": {
+              "projectPath": "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\ucubot\\ucubot.csproj"
             }
           }
         }

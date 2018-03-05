@@ -1,13 +1,13 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/ucubot/ucubot.csproj",
+    "projectUniqueName": "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\ucubot\\ucubot.csproj",
     "projectName": "ucubot",
-    "projectPath": "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/ucubot/ucubot.csproj",
-    "outputPath": "/media/firex/Data1/Work/UCU/CS@UCU/II_year/II_semester/Intro_to_databases/Practice/assignment1/ucubot/ucubot/obj/",
+    "projectPath": "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\ucubot\\ucubot.csproj",
+    "outputPath": "C:\\Users\\User2\\RiderProjects\\daemon_ucubot\\ucubot\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
-      "/usr/share/dotnet/sdk/NuGetFallbackFolder"
+      "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
     ],
     "originalTargetFrameworks": [
       "netcoreapp2.0"
