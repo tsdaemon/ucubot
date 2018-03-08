@@ -130,7 +130,7 @@ namespace usubot.End2EndTests
             values = ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(1);
             values[0].UserId.Should().Be("U111");
-            values[0].Type.Should().Be((int) LessonSignalType.BoringSimple);
+            values[0].Type.Should().Be(LessonSignalType.BoringSimple);
             
             // delete
             var deleteResponse = await _client.DeleteAsync($"/api/LessonSignalEndpoint/{values[0].Id}");
