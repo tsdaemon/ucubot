@@ -14,7 +14,7 @@ namespace ucubot.Controllers
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
-        private DataTable dataTable = new DataTable();
+        
 
 
         public LessonSignalEndpointController(IConfiguration configuration)
@@ -25,6 +25,7 @@ namespace ucubot.Controllers
         [HttpGet]
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
+            var dataTable = new DataTable();
             var connectionString = _configuration.GetConnectionString("BotDatabase");
 
             var connection = new MySqlConnection(connectionString);
@@ -81,8 +82,6 @@ namespace ucubot.Controllers
             return lessonSignalDto;
             
             
-            
-
         }
         
         [HttpPost]
