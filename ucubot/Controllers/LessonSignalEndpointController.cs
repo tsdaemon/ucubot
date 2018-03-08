@@ -42,7 +42,7 @@ namespace ucubot.Controllers
                 LessonSignalDto less = new LessonSignalDto();
                 less.Id = (int) row["id"];
                 less.UserId = (string) row["user_id"];
-                less.Type = (int) row["signal_type"] ;
+                less.Type = (LessonSignalType) row["signal_type"];
                 less.Timestamp = Convert.ToDateTime(row["timestamp"]);
                 lessonSignalDtos.Add(less);
             }
@@ -73,7 +73,7 @@ namespace ucubot.Controllers
             {
                 UserId = (string) row["user_id"],
                 Timestamp = Convert.ToDateTime(row["timestamp"]),
-                Type = (int) row["signal_type"],
+                Type = (LessonSignalType) row["signal_type"],
                 Id = (int) row["id"]
             };
             
