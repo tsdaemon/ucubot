@@ -36,12 +36,12 @@ namespace ucubot.Controllers
                 connection.Close();
                 data.Dispose();
                             
+                var lessonSignal = new List<LessonSignalDto>();
+                
                 if (dataTable.Rows.Count < 1)
                 {
-                    return null;
-                }
-                            
-                var lessonSignal = new List<LessonSignalDto>();
+                    return lessonSignal;
+                } 
             
                 foreach (DataRow row in dataTable.Rows)
                 {
