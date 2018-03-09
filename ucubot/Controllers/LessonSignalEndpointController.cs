@@ -61,12 +61,11 @@ namespace ucubot.Controllers
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {
-
             using (MySqlConnection connection = new MySqlConnection())
             {
                 connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
                 connection.Open();
-                MySqlCommand command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id=@id",connection);
+                MySqlCommand command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id=@id", connection);
                 command.Parameters.AddWithValue("id", id);
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                 {
@@ -75,22 +74,17 @@ namespace ucubot.Controllers
                         adapter.Fill(table);
                         if (table.Rows.Count == 0)
                         {
-                        
                             return null;
                         }
-                            DataRow row = table.Rows[0];
-                            return new LessonSignalDto()
-                            {
-                                Id = Convert.ToInt32(row["Id"]),
-                                Timestamp = (DateTime) row["Timestamp"],
-                                Type = (LessonSignalType) Convert.ToInt32(row["SignalType"]),
-                                UserId = row["UserId"].ToString()
-                            };
-                        
-                        
-                        
 
-
+                        DataRow row = table.Rows[0];
+                        return new LessonSignalDto()
+                        {
+                            Id = Convert.ToInt32(row["Id"]),
+                            Timestamp = (DateTime) row["Timestamp"],
+                            Type = (LessonSignalType) Convert.ToInt32(row["SignalType"]),
+                            UserId = row["UserId"].ToString()
+                        };
                     }
                 }
             }
@@ -107,26 +101,24 @@ namespace ucubot.Controllers
                 {
                     connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
                     connection.Open();
-                    MySqlCommand command = new MySqlCommand("INSERT INTO lesson_signal(SignalType, UserId) VALUES(@st, @uid)", connection);
+                    MySqlCommand command =
+                        new MySqlCommand("INSERT INTO lesson_signal(SignalType, UserId) VALUES(@st, @uid)", connection);
                     command.Parameters.AddWithValue("st", (int) signalType);
                     command.Parameters.AddWithValue("uid", userId);
                     command.ExecuteNonQuery();
                     return Accepted();
                 }
-
             }
             catch (CanNotParseSlackCommandException e)
             {
                 Console.Out.WriteLine(e.Message);
                 return BadRequest();
             }
-            
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            
             using (MySqlConnection connection = new MySqlConnection())
             {
                 connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
@@ -139,25 +131,19 @@ namespace ucubot.Controllers
                     using (DataTable table = new DataTable())
                     {
                         adapter.Fill(table);
-                        
+
                         if (table.Rows.Count == 0)
                         {
-               
                             return BadRequest();
                         }
-                           
-                            MySqlCommand deleteCommand = new MySqlCommand("DELETE FROM lesson_signal WHERE id=@id", connection);
+
+                        MySqlCommand deleteCommand =
+                            new MySqlCommand("DELETE FROM lesson_signal WHERE id=@id", connection);
                         deleteCommand.Parameters.AddWithValue("id", id);
-                            deleteCommand.ExecuteNonQuery();
-                            return Accepted();
-                                       
-                       
-                        
-
-
+                        deleteCommand.ExecuteNonQuery();
+                        return Accepted();
                     }
                 }
-                
             }
         }
     }
