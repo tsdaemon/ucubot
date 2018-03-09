@@ -84,12 +84,7 @@ namespace ucubot.Controllers
             OpenConnection();
             String userId = message.user_id;
             LessonSignalType  signalType;
-            long number;
-            bool result = long.TryParse(userId, out number);
-            if (!result)
-            {
-                return Accepted();
-            }
+           
             try
             {
                 signalType = message.text.ConvertSlackMessageToSignalType();
