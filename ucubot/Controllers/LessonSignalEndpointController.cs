@@ -61,20 +61,23 @@ namespace ucubot.Controllers
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {
-            // TODO: add query to get a signal by the given id
+
             using (MySqlConnection connection = new MySqlConnection())
             {
                 connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
                 connection.Open();
-                MySqlCommand command = new MySqlCommand(String.Format("SELECT * FROM lesson_signal WHERE id={0}", id),
-                    connection);
+                MySqlCommand command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id=@id",connection);
+                command.Parameters.AddWithValue("id", id);
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                 {
                     using (DataTable table = new DataTable())
                     {
                         adapter.Fill(table);
-                        try
+                        if (table.Rows.Count == 0)
                         {
+                        
+                            return null;
+                        }
                             DataRow row = table.Rows[0];
                             return new LessonSignalDto()
                             {
@@ -83,12 +86,9 @@ namespace ucubot.Controllers
                                 Type = (LessonSignalType) Convert.ToInt32(row["SignalType"]),
                                 UserId = row["UserId"].ToString()
                             };
-                        }
-                        catch (IndexOutOfRangeException e)
-                        {
-                            Console.Out.WriteLine(e.Message);
-                            return null;
-                        }
+                        
+                        
+                        
 
 
                     }
@@ -107,8 +107,10 @@ namespace ucubot.Controllers
                 {
                     connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
                     connection.Open();
-                    MySqlCommand command = new MySqlCommand(String.Format("INSERT INTO lesson_signal(SignalType, UserId) VALUES({0}, {1})", (int)signalType, userId), connection);
-                    await command.ExecuteNonQueryAsync();
+                    MySqlCommand command = new MySqlCommand("INSERT INTO lesson_signal(SignalType, UserId) VALUES(@st, @uid)", connection);
+                    command.Parameters.AddWithValue("st", (int) signalType);
+                    command.Parameters.AddWithValue("uid", userId);
+                    command.ExecuteNonQuery();
                     return Accepted();
                 }
 
@@ -124,31 +126,33 @@ namespace ucubot.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            //TODO: add delete command to remove signal
+            
             using (MySqlConnection connection = new MySqlConnection())
             {
                 connection.ConnectionString = _configuration.GetConnectionString("BotDatabase");
                 connection.Open();
-                MySqlCommand command = new MySqlCommand(String.Format("SELECT * FROM lesson_signal WHERE id={0}", id),
+                MySqlCommand command = new MySqlCommand(String.Format("SELECT * FROM lesson_signal WHERE id=@id", id),
                     connection);
+                command.Parameters.AddWithValue("id", id);
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                 {
                     using (DataTable table = new DataTable())
                     {
                         adapter.Fill(table);
-                        try
+                        
+                        if (table.Rows.Count == 0)
                         {
-                            DataRow row = table.Rows[0];
-                            MySqlCommand deleteCommand = new MySqlCommand(String.Format("DELETE FROM lesson_signal WHERE id={0}", id), connection);
-                            await deleteCommand.ExecuteNonQueryAsync();
-                            return Accepted();
-                                       
-                        }
-                        catch (IndexOutOfRangeException e)
-                        {
-                            Console.Out.WriteLine(e.Message);
+               
                             return BadRequest();
                         }
+                           
+                            MySqlCommand deleteCommand = new MySqlCommand("DELETE FROM lesson_signal WHERE id=@id", connection);
+                        deleteCommand.Parameters.AddWithValue("id", id);
+                            deleteCommand.ExecuteNonQuery();
+                            return Accepted();
+                                       
+                       
+                        
 
 
                     }
