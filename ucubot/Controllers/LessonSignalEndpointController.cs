@@ -24,6 +24,7 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
+            // <wl1C8LTJrgT
             // TODO: add query to get all signals
             return new LessonSignalDto[0];
         }
