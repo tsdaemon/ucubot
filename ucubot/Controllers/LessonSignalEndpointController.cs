@@ -104,15 +104,14 @@ namespace ucubot.Controllers
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
+                                
+                var command = connection.CreateCommand();
+                command.CommandText = "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@user_id, @signal_type);";
                 
-                string myQuery = "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@UserId, @SignalType);";
-                var command = new MySqlCommand(myQuery, connection);
-
-                command.Parameters.Add("@UserId", MySqlDbType.Text).Value = userId;
-                command.Parameters.Add("@SignalType", MySqlDbType.Text).Value = signalType;
-                command.CommandType = CommandType.Text;
+                command.Parameters.Add(new MySqlParameter("user_id", userId));
+                command.Parameters.Add(new MySqlParameter("signal_type", signalType));
                 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
                 
                 connection.Close();
             }
@@ -128,12 +127,12 @@ namespace ucubot.Controllers
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
+                
+                var command = connection.CreateCommand();
+                command.CommandText = "DELETE FROM lesson_signal WHERE id = @id";
+                command.Parameters.Add(new MySqlParameter("id", id));
 
-                var myQuery = "DELETE FROM lesson_signal WHERE id = @id";
-                var command = new MySqlCommand(myQuery, connection);
-                command.Parameters.AddWithValue("id", id);
-
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
                 
                 connection.Close();
             }
