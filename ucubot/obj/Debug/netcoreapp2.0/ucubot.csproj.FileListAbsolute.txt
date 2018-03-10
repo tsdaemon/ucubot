@@ -1,0 +1,8 @@
+D:\UCU\Databases\ucubot-learning1\ucubot-learning\ucubot\bin\Debug\netcoreapp2.0\ucubot.deps.json
+D:\UCU\Databases\ucubot-learning1\ucubot-learning\ucubot\bin\Debug\netcoreapp2.0\ucubot.runtimeconfig.json
+D:\UCU\Databases\ucubot-learning1\ucubot-learning\ucubot\bin\Debug\netcoreapp2.0\ucubot.runtimeconfig.dev.json
+D:\UCU\Databases\ucubot-learning1\ucubot-learning\ucubot\obj\Debug\netcoreapp2.0\ucubot.AssemblyInfo.cs
+D:\UCU\Databases\lab1\ucubot-learning1\ucubot-learning\ucubot\bin\Debug\netcoreapp2.0\ucubot.deps.json
+D:\UCU\Databases\lab1\ucubot-learning1\ucubot-learning\ucubot\bin\Debug\netcoreapp2.0\ucubot.runtimeconfig.json
+D:\UCU\Databases\lab1\ucubot-learning1\ucubot-learning\ucubot\bin\Debug\netcoreapp2.0\ucubot.runtimeconfig.dev.json
+D:\UCU\Databases\lab1\ucubot-learning1\ucubot-learning\ucubot\obj\Debug\netcoreapp2.0\ucubot.AssemblyInfo.cs
