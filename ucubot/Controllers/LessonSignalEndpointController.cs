@@ -62,7 +62,8 @@ namespace ucubot.Controllers
             var conn = new MySqlConnection(connectionString);
             conn.Open();
             
-            var command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id = " + Convert.ToString(id), conn);
+            var command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id = @id", conn);
+            command.Parameters.AddWithValue("id", id);
 
             DataTable dt = new DataTable();
 
@@ -95,18 +96,24 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
+            // Console.WriteLine(message.user_id);
+            // Console.WriteLine(message.text);
+            // Console.WriteLine("!!!!");
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
 
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var conn = new MySqlConnection(connectionString);
             conn.Open();
-            
-            var command = new MySqlCommand(String.Format("INSERT INTO lesson_signal (user_id, signal_type) VALUES ({0}, {1});", userId, signalType), conn);
+            var command =
+                new MySqlCommand("INSERT INTO lesson_signal (user_id, signal_type) VALUES (@userId, @signalType);",
+                    conn);
+            command.Parameters.AddWithValue("userId", userId);
+            command.Parameters.AddWithValue("signalType", signalType);
             await command.ExecuteNonQueryAsync();
-            
+    
             conn.Close();
-            
+
             return Accepted();
         }
         
@@ -117,7 +124,8 @@ namespace ucubot.Controllers
             var conn = new MySqlConnection(connectionString);
             conn.Open();
             
-            var command = new MySqlCommand(String.Format("DELETE FROM lesson_signal WHERE id = @id;", id), conn);
+            var command = new MySqlCommand("DELETE FROM lesson_signal WHERE id = @id;", conn);
+            command.Parameters.AddWithValue("id", id);
             await command.ExecuteNonQueryAsync();
             
             conn.Close();
