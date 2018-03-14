@@ -1,0 +1,1 @@
+CREATE TABLE lesson_signal(Id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, Timestamp datetime DEFAULT CURRENT_TIMESTAMP, SignalType int NOT NULL, UserId varchar(255) NOT NULL);
