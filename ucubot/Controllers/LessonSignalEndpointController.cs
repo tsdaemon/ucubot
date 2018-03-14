@@ -112,7 +112,8 @@ namespace ucubot.Controllers
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
-            
+            cmd.Parameters.Add("@signalType", signalType);
+            cmd.Parameters.Add("@userId", userId);
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
