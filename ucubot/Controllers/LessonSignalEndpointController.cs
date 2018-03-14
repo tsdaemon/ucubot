@@ -47,9 +47,9 @@ namespace ucubot.Controllers
                 arr.Add(new LessonSignalDto
                 {
                     Id = (int)row["id"],
-                    UserId = (string) row["UserId"],
-                    Type = (LessonSignalType) row["SignalType"],
-                    Timestamp = (DateTime) row["timestamp_"]
+                    UserId = (string) row["user_id"],
+                    Type = (LessonSignalType) row["signal_type"],
+                    Timestamp = (DateTime) row["timestamp"]
                        
                 });
             }
@@ -82,9 +82,9 @@ namespace ucubot.Controllers
                 sign = new LessonSignalDto
                 {
                     
-                    UserId = (string) row["UserId"],
-                    Type = (LessonSignalType) row["SignalType"],
-                    Timestamp = (DateTime) row["timestamp_"]
+                    UserId = (string) row["user_id"],
+                    Type = (LessonSignalType) row["signal_type"],
+                    Timestamp = (DateTime) row["timestamp"]
                        
                 };
             }
@@ -107,7 +107,7 @@ namespace ucubot.Controllers
             // TODO: add insert command to store signal
             var connectionString = _configuration.GetConnectionString("BotDatabase");
              
-            string query = "insert into lesson_signal(SignalType, UserId) " +
+            string query = "insert into lesson_signal(signal_type, user_id) " +
                            "values(@signalType, @userId)  ;";
 
             var conn = new MySqlConnection(connectionString);        
