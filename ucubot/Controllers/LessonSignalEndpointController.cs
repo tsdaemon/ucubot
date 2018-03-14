@@ -29,6 +29,7 @@ namespace ucubot.Controllers
 
             try
             {
+                mySqlConnection.Open();
                 var mySqlDataAdapter = new MySqlDataAdapter("SELECT * FROM lesson_signal", mySqlConnection);
                 mySqlDataAdapter.Fill(createdDataTable);
             }
@@ -52,7 +53,7 @@ namespace ucubot.Controllers
                 };
                 lSDs.Add(LSD);
             }
-
+            mySqlConnection.Close();
             return lSDs;
         }
 
@@ -60,24 +61,25 @@ namespace ucubot.Controllers
         public LessonSignalDto ShowSignal(long id)
         {
             var mySqlConnection = new MySqlConnection(_configuration.GetConnectionString("BotDatabase"));
+            var createdDataTable = new DataTable();
+            
             try
             {
                 mySqlConnection.Open();
+                var mySqlCommand = new MySqlCommand("SELECT * FROM lesson_signal WHERE id = @id", mySqlConnection);
+                var mySqlDataAdapter = new MySqlDataAdapter(mySqlCommand);
+                mySqlDataAdapter.Fill(createdDataTable);
+                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
 
-            var mySqlCommand = new MySqlCommand("SELECT * FROM lesson_signal WHERE id = @id", mySqlConnection);
-            var createdDataTable = new DataTable();
-            mySqlCommand.Parameters.AddWithValue("id", id);
             
-            var mySqlDataAdapter = new MySqlDataAdapter(mySqlCommand);
-            
-            mySqlDataAdapter.Fill(createdDataTable);
             if (createdDataTable.Rows.Count < 1)
                 return null;
+            
             var row = createdDataTable.Rows[0];
             var LSD = new LessonSignalDto
             {
@@ -85,10 +87,13 @@ namespace ucubot.Controllers
                 Type = (LessonSignalType) row["signal_type"],
                 UserId = (string) row["user_id"]
             };
+            
+            mySqlConnection.Close();
             return LSD;
-
         }
 
+        
+        
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
@@ -96,26 +101,45 @@ namespace ucubot.Controllers
             var signalType = message.text.ConvertSlackMessageToSignalType();
 
             MySqlConnection mySqlConnection = new MySqlConnection(_configuration.GetConnectionString("BotDatabase"));
-            var command = mySqlConnection.CreateCommand();
-            
-            mySqlConnection.Open();
-            command.CommandText = String.Format("INSERT INTO lesson_signal (user_id, signal_type) VALUES ({0}, {2});", userId, signalType);
-            await command.ExecuteNonQueryAsync();
+
+            try
+            {
+
+                mySqlConnection.Open();
+                MySqlCommand command = new MySqlCommand("INSERT INTO lesson_signal (user_id, signal_type) " +
+                                                        "VALUES (@userId, @signalType);", mySqlConnection);
+                command.Parameters.AddWithValue("@userId", userId);
+                command.Parameters.AddWithValue("@signalType", signalType);
+
+                await command.ExecuteNonQueryAsync();
+                mySqlConnection.Close();
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+            }
 
             return Accepted();
         }
 
+        
+        
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var mySqlConnection = new MySqlConnection(connectionString);
+            
             try
             {
-            mySqlConnection.Open();
-            var mySqlCommand = new MySqlCommand("DELETE FROM lesson_signal WHERE id=" + id, mySqlConnection);
-            mySqlCommand.ExecuteNonQuery();
-                      }
+                mySqlConnection.Open();
+                var mySqlCommand = new MySqlCommand("DELETE FROM lesson_signal WHERE id=" + id, mySqlConnection);
+                mySqlCommand.ExecuteNonQuery();
+            }
             catch (Exception ex)
                         {
                         Console.WriteLine(ex.ToString());
