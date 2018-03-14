@@ -107,11 +107,12 @@ namespace ucubot.Controllers
             // TODO: add insert command to store signal
             var connectionString = _configuration.GetConnectionString("BotDatabase");
              
-            string query = "insert into lesson_signal(signal_type, user_id) " +
-                           "values(@signalType, @userId)  ;";
+            string query = "insert into lesson_signal(signal_type, user_id, timestamp) " +
+                           "values(@signalType, @userId, @timestamp)  ;";
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.Add("@timestamp",DateTime.Now);
             cmd.Parameters.Add("@signalType", signalType);
             cmd.Parameters.Add("@userId", userId);
             conn.Open();
