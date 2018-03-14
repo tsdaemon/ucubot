@@ -107,13 +107,16 @@ namespace ucubot.Controllers
             // TODO: add insert command to store signal
             var connectionString = _configuration.GetConnectionString("BotDatabase");
              
-            string query = "select * from lesson-signal";
+            string query = "insert into lesson-signal(SignalType, UserId) " +
+                           "values(@signalType, @userId)  ;";
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.Add("id", id);
-            conn.Open();
             
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+
             return Accepted();
         }
         
@@ -121,6 +124,17 @@ namespace ucubot.Controllers
         public async Task<IActionResult> RemoveSignal(long id)
         {
             //TODO: add delete command to remove signal
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+             
+            string query = " DELETE FROM lesson-signal where id = @id ;";
+
+            var conn = new MySqlConnection(connectionString);        
+            var cmd = new MySqlCommand(query, conn);
+            
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            
             return Accepted();
         }
     }
