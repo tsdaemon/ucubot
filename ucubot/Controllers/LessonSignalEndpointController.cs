@@ -49,7 +49,7 @@ namespace ucubot.Controllers
                     Id = (int)row["id"],
                     UserId = (string) row["user_id"],
                     Type = (LessonSignalType) row["signal_type"],
-                    Timestamp = (DateTime) row["timestamp"]
+                    Timestamp = Convert.ToDateTime( row["timestamp"])
                        
                 });
             }
@@ -84,7 +84,7 @@ namespace ucubot.Controllers
                     Id = (int)row["id"],
                     UserId = (string) row["user_id"],
                     Type = (LessonSignalType) row["signal_type"],
-                    Timestamp = (DateTime) row["timestamp"]
+                    Timestamp = Convert.ToDateTime( row["timestamp"])
                        
                 };
             }
