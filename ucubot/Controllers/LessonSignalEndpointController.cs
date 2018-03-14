@@ -81,10 +81,10 @@ namespace ucubot.Controllers
                 var row = dataTable.Rows[0];
                 sign = new LessonSignalDto
                 {
-                    Id = (int) row["id"],
-                    UserId = (string) row["userId"],
-                    Type = (LessonSignalType) row["signalType"],
-                    Timestamp = (DateTime) row["dateTime"]
+                    
+                    UserId = (string) row["UserId"],
+                    Type = (LessonSignalType) row["SignalType"],
+                    Timestamp = (DateTime) row["timestamp_"]
                        
                 };
             }
