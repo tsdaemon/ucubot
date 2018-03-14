@@ -98,7 +98,7 @@ namespace ucubot.Controllers
             connection.Open();
 
             var newCommand = new MySqlCommand("INSERT INTO lesson_signal (timestamp, signal_type, user_id) VALUES(@0, @1, @2);");
-            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var timestamp = DateTime.Now();
             newCommand.Parameters.AddWithValue("@0",timestamp);
             newCommand.Parameters.AddWithValue("@1", signalType);
             newCommand.Parameters.AddWithValue("@2", userId);
