@@ -13,7 +13,7 @@ using ucubot.Model;
 
 namespace ucubot.Controllers
 {
-    [Route("api/[controller]/:[id]")]
+    [Route("api/[controller]")]
     public class LessonSignalEndpointController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -28,6 +28,7 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
+
             var connection = new MySqlConnection(connectionString);
             connection.Open();
 
@@ -52,9 +53,10 @@ namespace ucubot.Controllers
             
 
             return lst;
+
         }
         
-        [HttpGet]
+        [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {   
             var connectionString = _configuration.GetConnectionString("BotDatabase");
@@ -82,7 +84,6 @@ namespace ucubot.Controllers
             }
             
             
-            
             return null;
         }
         
@@ -105,13 +106,13 @@ namespace ucubot.Controllers
             newCommand.ExecuteNonQuery();
             connection.Close();
             
-            
             return Accepted();
         }
         
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
+
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
             connection.Open();
@@ -120,7 +121,7 @@ namespace ucubot.Controllers
             newCommand.ExecuteNonQuery();
             connection.Close();
             
-            
+          
             return Accepted();
         }
     }
