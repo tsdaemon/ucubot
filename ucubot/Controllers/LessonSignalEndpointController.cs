@@ -31,7 +31,7 @@ namespace ucubot.Controllers
             // <wl1C8LTJrgT
             // TODO: add query to get all signals
             
-            string query = "select * from lesson_signal";
+            string query = "select * from lesson_signal;";
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
@@ -65,11 +65,11 @@ namespace ucubot.Controllers
             // TODO: add query to get a signal by the given id
             var connectionString = _configuration.GetConnectionString(" BotDatabase");
              
-            string query = "select * from lesson_signal where id = @id";
+            string query = "select * from lesson_signal where id = @id;";
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.Add("id", id);
+            cmd.Parameters.Add("@id", id);
             conn.Open();
             
            
@@ -131,7 +131,7 @@ namespace ucubot.Controllers
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
-            
+            cmd.Parameters.Add("@id", id);
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
