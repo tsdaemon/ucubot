@@ -31,7 +31,7 @@ namespace ucubot.Controllers
             // <wl1C8LTJrgT
             // TODO: add query to get all signals
             
-            string query = "select * from lesson-signal";
+            string query = "select * from lesson_signal";
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
@@ -47,9 +47,9 @@ namespace ucubot.Controllers
                 arr.Add(new LessonSignalDto
                 {
                     Id = (int)row["id"],
-                    UserId = (string) row["userId"],
-                    Type = (LessonSignalType) row["signalType"],
-                    Timestamp = (DateTime) row["dateTime"]
+                    UserId = (string) row["UserId"],
+                    Type = (LessonSignalType) row["SignalType"],
+                    Timestamp = (DateTime) row["timestamp_"]
                        
                 });
             }
@@ -63,9 +63,9 @@ namespace ucubot.Controllers
         public LessonSignalDto ShowSignal(long id)
         {
             // TODO: add query to get a signal by the given id
-            var connectionString = _configuration.GetConnectionString("BotDatabase");
+            var connectionString = _configuration.GetConnectionString(" BotDatabase");
              
-            string query = "select * from lesson-signal where id = @id";
+            string query = "select * from lesson_signal where id = @id";
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
@@ -107,7 +107,7 @@ namespace ucubot.Controllers
             // TODO: add insert command to store signal
             var connectionString = _configuration.GetConnectionString("BotDatabase");
              
-            string query = "insert into lesson-signal(SignalType, UserId) " +
+            string query = "insert into lesson_signal(SignalType, UserId) " +
                            "values(@signalType, @userId)  ;";
 
             var conn = new MySqlConnection(connectionString);        
@@ -126,7 +126,7 @@ namespace ucubot.Controllers
             //TODO: add delete command to remove signal
             var connectionString = _configuration.GetConnectionString("BotDatabase");
              
-            string query = " DELETE FROM lesson-signal where id = @id ;";
+            string query = " DELETE FROM lesson_signal where id = @id ;";
 
             var conn = new MySqlConnection(connectionString);        
             var cmd = new MySqlCommand(query, conn);
