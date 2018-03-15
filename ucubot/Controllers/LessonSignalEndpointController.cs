@@ -48,7 +48,7 @@ namespace ucubot.Controllers
                 {
                     Id = (int) row["Id"],
                     Timestamp = (DateTime) row["Timestamp"],
-                    Type = (LessonSignalType) row["SinalType"],
+                    Type = (LessonSignalType) row["SignalType"],
                     UserId = (string) row["UserId"]
                 });
             }
