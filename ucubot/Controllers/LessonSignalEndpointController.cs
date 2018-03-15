@@ -67,10 +67,11 @@ namespace ucubot.Controllers
              
             string query = "select * from lesson_signal where id = @id;";
 
-            var conn = new MySqlConnection(connectionString);        
+            var conn = new MySqlConnection(connectionString);     
+            conn.Open();
             var cmd = new MySqlCommand(query, conn);
             cmd.Parameters.Add("@id", id);
-            conn.Open();
+            
             
            
             var da = new MySqlDataAdapter(cmd);
