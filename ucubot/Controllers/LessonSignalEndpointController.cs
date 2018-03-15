@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var query = "SELECT * FROM LessonSignal";
+            var query = "SELECT * FROM lesson_signal";
             var connection = new MySqlConnection(connectionString);
             var dataTable = new DataTable();
             var adapter = new MySqlDataAdapter(query, connection);
@@ -46,11 +46,13 @@ namespace ucubot.Controllers
             {
                 lst.Add(new LessonSignalDto
                 {
+
                     Id = (int) row["Id"],
                     Timestamp = (DateTime) row["Timestamp"],
                     Type = (LessonSignalType) row["SignalType"],
                     UserId = (string) row["UserId"]
                 });
+
             }
     
             return lst;
@@ -62,7 +64,7 @@ namespace ucubot.Controllers
         {
  
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var query = "SELECT * FROM LessonSignal WHERE Id = @id";
+            var query = "SELECT * FROM lesson_signal WHERE Id = @id";
             var connection = new MySqlConnection(connectionString);
             
             var dataTable = new DataTable();
@@ -82,12 +84,14 @@ namespace ucubot.Controllers
                        
             if (dataTable.Rows.Count == 0)
             {
+
                 return null;
             }
 
             var row = dataTable.Rows[0];
                         
             var signalDto = new LessonSignalDto
+
                 {
                     Timestamp = (DateTime) row["TimeStamp"],
                     Type = (LessonSignalType) row["SignalType"],
@@ -101,11 +105,13 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
+
 	        var userId = message.user_id.Replace("'", "\"");
+
             var signalType = message.text.ConvertSlackMessageToSignalType();
 
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var query = "INSERT INTO LessonSignal (UserId, SignalType) VALUES (@user_id, @signal_type)";
+            var query = "INSERT INTO lesson_signal (UserId, SignalType) VALUES (@user_id, @signal_type)";
             var connection = new MySqlConnection(connectionString);
             
             var command = new MySqlCommand(query, connection);
@@ -130,7 +136,7 @@ namespace ucubot.Controllers
         public async Task<IActionResult> RemoveSignal(long id)
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            var query = "DELETE FROM LessonSignal WHERE Id = @id";
+            var query = "DELETE FROM lesson_signal WHERE Id = @id";
             var connection = new MySqlConnection(connectionString);
             
             var command = new MySqlCommand(query, connection);
