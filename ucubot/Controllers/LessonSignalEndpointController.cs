@@ -63,7 +63,7 @@ namespace ucubot.Controllers
         public LessonSignalDto ShowSignal(long id)
         {
             // TODO: add query to get a signal by the given id
-            var connectionString = _configuration.GetConnectionString(" BotDatabase");
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
              
             string query = "select * from lesson_signal where id = @id;";
 
