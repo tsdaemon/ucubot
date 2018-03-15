@@ -49,7 +49,7 @@ namespace ucubot.Controllers
                 {
                     UserId = (string) row["user_id"],
                     Timestamp = (DateTime) (row["timestamp"]),
-                    Type = ((string) row["signal_type"]).ConvertSlackMessageToSignalType()
+                    Type = (LessonSignalType) row["signal_type"]
                 };
                 lSDs.Add(LSD);
             }
@@ -84,7 +84,7 @@ namespace ucubot.Controllers
             var LSD = new LessonSignalDto
             {
                 Timestamp = (DateTime) row["timestamp_"],
-                Type = (LessonSignalType) row["signal_type"],
+                Type = (LessonSignalType) Convert.ToInt32(row["signal_type"]),
                 UserId = (string) row["user_id"]
             };
             
