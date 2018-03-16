@@ -1,6 +1,6 @@
 use ucubot;
-create table lesson_signal(Id int auto_increment not null,
+create table lesson_signal(id int not null auto_increment,
  timestamp datetime not null,
- SignalType int not null, 
- UserId varchar(100),
+ signal_type int not null, 
+ user_id varchar(100),
  primary key(id));
