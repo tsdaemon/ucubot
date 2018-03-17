@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "53BFF8260079E8BD196ED97C1B142165DB4968A8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "53BFF8260079E8BD196ED97C1B142165DB4968A8" : 9223372036854775807,
+    "9BCEBF8688DFE5BC67C6E2081BF541D77761E37F" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "E44A7792-2C34-4110-B599-5AC94583A34A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "53BFF8260079E8BD196ED97C1B142165DB4968A8" : "ucubot\/",
+    "9BCEBF8688DFE5BC67C6E2081BF541D77761E37F" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Untitled",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Untitled.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/PopovRostyk\/ucubot.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "53BFF8260079E8BD196ED97C1B142165DB4968A8"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/dfghjm\/ucu.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9BCEBF8688DFE5BC67C6E2081BF541D77761E37F"
+    }
+  ]
+}
