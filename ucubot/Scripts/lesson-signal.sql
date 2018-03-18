@@ -1,3 +1,4 @@
+USE ucubot;
 CREATE TABLE lesson_signal(
 id int NOT NULL,
 time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
