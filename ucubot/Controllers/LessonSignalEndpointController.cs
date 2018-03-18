@@ -82,8 +82,8 @@ namespace ucubot.Controllers
 
             try
             {
-                await command.ExecuteNonQueryAsync();
                 connection.Open();
+                await command.ExecuteNonQueryAsync();
                 connection.Close();
             }
             catch (Exception e)
