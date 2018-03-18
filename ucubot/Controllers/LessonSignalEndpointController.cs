@@ -31,7 +31,7 @@ namespace ucubot.Controllers
             
             connection.Open();
 
-            var dataAdapter = new MySqlDataAdapter(command);
+            var dataAdapter = new MySqlDataAdapter(command);    
             dataAdapter.Fill(data);
 
             var signals = new List<LessonSignalDto>();
@@ -62,6 +62,10 @@ namespace ucubot.Controllers
             
             var dataAdapter = new MySqlDataAdapter(command);
             dataAdapter.Fill(data);
+            if (data.Rows.Count < 1)
+            {
+                return null;
+            }
 
             var signal = new LessonSignalDto
             {
