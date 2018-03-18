@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -77,8 +77,8 @@ namespace ucubot.Controllers
                 var command = connection.CreateCommand();
                 command.CommandText =
                     "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@user_id, @signal_type)";
-                command.Parameters.Add(new MySqlParameter("signal_type", signalType));
                 command.Parameters.Add(new MySqlParameter("user_id", userId));
+                command.Parameters.Add(new MySqlParameter("signal_type", signalType));
 
             try
             {
@@ -100,7 +100,6 @@ namespace ucubot.Controllers
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
 
-            
             var command = connection.CreateCommand();
             command.CommandText = "DELETE FROM lesson_signal WHERE ID = @id;";
             command.Parameters.Add(new MySqlParameter("id", id));
@@ -124,7 +123,6 @@ namespace ucubot.Controllers
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             var connection = new MySqlConnection(connectionString);
-            connection.Open();
 
             var dataTable = new DataTable();
             var queryCommand = new MySqlCommand(cmdText, connection);
@@ -132,6 +130,7 @@ namespace ucubot.Controllers
 
             try
             {
+                connection.Open();
                 adapter.Fill(dataTable);
                 connection.Close();
                 adapter.Dispose();
