@@ -45,7 +45,6 @@ namespace ucubot.Controllers
                     yield return signalDto;
                 }
 			}
-            return new LessonSignalDto[0];
         }
         
         [HttpGet("{id}")]
@@ -63,10 +62,10 @@ namespace ucubot.Controllers
 
 				if(dataset.Tables[0].Rows.Count != 0){
 					var signalDto = new LessonSignalDto{
-						id = (int) dataset.Tables[0].Rows[i]["id"],
-						time_stamp = (DateTime) dataset.Tables[0].Rows[i]["time_stamp"],
-						signal_type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[i]["signal_type"]),
-						user_id = (string) dataset.Tables[0].Rows[i]["user_id"]
+						id = (int) dataset.Tables[0].Rows[0]["id"],
+						time_stamp = (DateTime) dataset.Tables[0].Rows[0]["time_stamp"],
+						signal_type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[0]["signal_type"]),
+						user_id = (string) dataset.Tables[0].Rows[0]["user_id"]
 					};
 					return signalDto;
 				}
@@ -82,13 +81,13 @@ namespace ucubot.Controllers
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
 			using (connection){
-				SqlCommand command = new SqlCommand("INSERT INTO lesson_signal (user_id, signal_type) VALUES (@userId, @signalType);");
-				command.Connection = connection;
-				command.CommandText = "DELETE FROM lesson_signal WHERE id = @id";
+				var command = connection.CreateCommand();
+				command.CommandText = "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@userId, @signalType);";
 				command.Parameters.Add(new MySqlParameter("user_id", userId));
 				command.Parameters.Add(new MySqlParameter("signal_type", signalType));
 				connection.Open();
-				SqlDataReader reader = command.ExecuteReader();
+				await command.ExecuteNonQueryAsync();
+				connection.Close();
 			}
             return Accepted();
         }
@@ -99,12 +98,12 @@ namespace ucubot.Controllers
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
 			using (connection){
-				SqlCommand command = new SqlCommand("DELETE FROM lesson_signal WHERE id = @id;");
-				command.Connection = connection;
+				var command = connection.CreateCommand();
 				command.CommandText = "DELETE FROM lesson_signal WHERE id = @id";
 				command.Parameters.Add(new MySqlParameter("id", id));
 				connection.Open();
-				SqlDataReader reader = command.ExecuteReader();
+				await command.ExecuteNonQueryAsync();
+				connection.Close();
 			}
             return Accepted();
         }
