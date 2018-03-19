@@ -1,0 +1,4 @@
+C:\Users\Super\Desktop\goodbot\ucubot-learning\ucubot\obj\Debug\netcoreapp2.0\ucubot.csprojResolveAssemblyReference.cache
+C:\Users\Super\Desktop\goodbot\ucubot-learning\ucubot\obj\Debug\netcoreapp2.0\ucubot.csproj.CoreCompileInputs.cache
+C:\Users\Super\Desktop\goodbot\ucubot-learning\ucubot\obj\Debug\netcoreapp2.0\ucubot.AssemblyInfoInputs.cache
+C:\Users\Super\Desktop\goodbot\ucubot-learning\ucubot\obj\Debug\netcoreapp2.0\ucubot.AssemblyInfo.cs

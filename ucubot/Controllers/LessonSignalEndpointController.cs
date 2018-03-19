@@ -39,7 +39,7 @@ namespace ucubot.Controllers
                 {
                     result.Add(new LessonSignalDto
                     {
-                        Id = (long) row["Id"],
+                        Id = (int) row["Id"],
                         UserId = (string) row["UserId"],
                         Type = (LessonSignalType) row["signal_type"],
                         Timestamp = Convert.ToDateTime(row["Timestemp"])
@@ -82,11 +82,11 @@ namespace ucubot.Controllers
                 var row = dt.Rows[0];
                 return new LessonSignalDto
                 {
-                    Id = (long) row["Id"],
+                    Id = (int) row["Id"],
                     UserId = (string) row["UserId"],
                     Type = (LessonSignalType) row["signal_type"],
                     Timestamp = Convert.ToDateTime(row["Timestemp"])
-                });
+                };
 
 
 
@@ -97,7 +97,7 @@ namespace ucubot.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 conn.Close();
-                return new LessonSignalDto[0];
+                return new LessonSignalDto();
             }
         }
 
@@ -106,8 +106,8 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            var userId = message.UserId;
-            var signalType = message.Text.ConvertSlackMessageToSignalType();
+            var userId = message.user_id;
+            var signalType = message.text.ConvertSlackMessageToSignalType();
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             MySqlConnection conn = new MySqlConnection(connectionString);
             try
