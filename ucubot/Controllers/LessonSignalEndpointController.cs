@@ -32,18 +32,19 @@ namespace ucubot.Controllers
                 var dataset = new DataSet();
                 
                 adapter.Fill(dataset, "lesson_signal");
-
+	            var signals = new List<LessonSignalDto>();
                 for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
                 {
-                    var signalDto = new LessonSignalDto
+	                signals.Add(new LessonSignalDto
                     {
-                        id = (int) dataset.Tables[0].Rows[i]["id"],
-                        time_stamp = (DateTime) dataset.Tables[0].Rows[i]["time_stamp"],
-                        signal_type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[i]["signal_type"]),
-                        user_id = (string) dataset.Tables[0].Rows[i]["user_id"]
-                    };
-                    yield return signalDto;
+                        Id = (int) dataset.Tables[0].Rows[i]["id"],
+                        Timestamp = (DateTime) dataset.Tables[0].Rows[i]["time_stamp"],
+                        Type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[i]["signal_type"]),
+                        UserId = (string) dataset.Tables[0].Rows[i]["user_id"]
+                    });
                 }
+	            connection.Close();
+	            return signals;
 			}
         }
         
@@ -54,7 +55,9 @@ namespace ucubot.Controllers
 			var connection = new MySqlConnection(connectionString);
 			using (connection){
 				connection.Open();
-                var adapter = new MySqlDataAdapter("SELECT * FROM lesson_signal WHERE id = @id;", connection);
+				var command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id = @id", connection);
+				command.Parameters.AddWithValue("id", id);
+                var adapter = new MySqlDataAdapter(command);
                 
                 var dataset = new DataSet();
                 
@@ -62,15 +65,15 @@ namespace ucubot.Controllers
 
 				if(dataset.Tables[0].Rows.Count != 0){
 					var signalDto = new LessonSignalDto{
-						id = (int) dataset.Tables[0].Rows[0]["id"],
-						time_stamp = (DateTime) dataset.Tables[0].Rows[0]["time_stamp"],
-						signal_type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[0]["signal_type"]),
-						user_id = (string) dataset.Tables[0].Rows[0]["user_id"]
+						Timestamp = (DateTime) dataset.Tables[0].Rows[0]["time_stamp"],
+						Type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[0]["signal_type"]),
+						UserId = (string) dataset.Tables[0].Rows[0]["user_id"]
 					};
+					connection.Close();
 					return signalDto;
 				}
+				return null;
 			}
-		return null;
         }
         
         [HttpPost]
@@ -81,11 +84,11 @@ namespace ucubot.Controllers
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
 			using (connection){
+				connection.Open();
 				var command = connection.CreateCommand();
 				command.CommandText = "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@userId, @signalType);";
 				command.Parameters.Add(new MySqlParameter("user_id", userId));
 				command.Parameters.Add(new MySqlParameter("signal_type", signalType));
-				connection.Open();
 				await command.ExecuteNonQueryAsync();
 				connection.Close();
 			}
@@ -98,10 +101,10 @@ namespace ucubot.Controllers
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
 			using (connection){
+				connection.Open();
 				var command = connection.CreateCommand();
 				command.CommandText = "DELETE FROM lesson_signal WHERE id = @id";
 				command.Parameters.Add(new MySqlParameter("id", id));
-				connection.Open();
 				await command.ExecuteNonQueryAsync();
 				connection.Close();
 			}
