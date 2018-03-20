@@ -1,2 +1,2 @@
 use ucubot;
-Create table lesson_signal(Id LONG, Timestemp DateTime, signal_type int, UserId varchar(10));
+Create table lessons_signal(Id LONG, Timestemp DateTime, signal_type int, user_id varchar(10));

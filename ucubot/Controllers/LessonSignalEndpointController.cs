@@ -40,7 +40,7 @@ namespace ucubot.Controllers
                     result.Add(new LessonSignalDto
                     {
                         Id = (int) row["Id"],
-                        UserId = (string) row["UserId"],
+                        user_id = (string) row["user_id"],
                         Type = (LessonSignalType) row["signal_type"],
                         Timestamp = Convert.ToDateTime(row["Timestemp"])
                     });
@@ -83,7 +83,7 @@ namespace ucubot.Controllers
                 return new LessonSignalDto
                 {
                     Id = (int) row["Id"],
-                    UserId = (string) row["UserId"],
+                    user_id = (string) row["user_id"],
                     Type = (LessonSignalType) row["signal_type"],
                     Timestamp = Convert.ToDateTime(row["Timestemp"])
                 };
@@ -106,7 +106,7 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            var userId = message.user_id;
+            var user_id = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -116,10 +116,10 @@ namespace ucubot.Controllers
                 conn.Open();
                 var command = conn.CreateCommand();
                 command.CommandText =
-                    "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@userId, @signal_type);";
+                    "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@user_id, @signal_type);";
                 command.Parameters.AddRange(new[]
                 {
-                    new MySqlParameter("userId", userId),
+                    new MySqlParameter("user_id", user_id),
                     new MySqlParameter("signal_type", signalType)
                 });
                 await command.ExecuteNonQueryAsync();
