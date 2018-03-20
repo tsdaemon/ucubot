@@ -77,7 +77,7 @@ namespace ucubot.Controllers
             {
                 LessonSignalDto lesson = new LessonSignalDto();
                 lesson.UserId = (string) element["user_id"];
-                lesson.Type = (int) element["signal_type"];
+                lesson.Type = (LessonSignalType) element["signal_type"];
                 lesson.Timestamp = Convert.ToDateTime(element["timestamp"]);
                 lesson.Id = (int) element["id"];
                 return lesson;
@@ -90,8 +90,8 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            var userId = message.UserId;
-            var signalType = message.Text.ConvertSlackMessageToSignalType();
+            var userId = message.user_id;
+            var signalType = message.text.ConvertSlackMessageToSignalType();
             
 
             var connectionString = _configuration.GetConnectionString("BotDatabase");
@@ -99,7 +99,7 @@ namespace ucubot.Controllers
             connection.Open();
 
             var newCommand = new MySqlCommand("INSERT INTO lesson_signal (timestamp, signal_type, user_id) VALUES(@0, @1, @2);");
-            var timestamp = DateTime.Now();
+            var timestamp = DateTime.Now;
             newCommand.Parameters.AddWithValue("@0",timestamp);
             newCommand.Parameters.AddWithValue("@1", signalType);
             newCommand.Parameters.AddWithValue("@2", userId);
