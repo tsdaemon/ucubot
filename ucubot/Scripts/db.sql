@@ -1,0 +1,4 @@
+CREATE DATABASE ucubot;
+CREATE USER 'test_user'@'%' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON ucubot.* TO 'test_user'@'%';
+FLUSH PRIVILEGES;
