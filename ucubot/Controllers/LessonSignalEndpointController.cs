@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -26,9 +27,34 @@ namespace ucubot.Controllers
         [HttpGet]
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
+            IEnumerable<LessonSignalDto> lessonSignalDtos = new List<LessonSignalDto>();
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            // TODO: add query to get all signals
-            return new LessonSignalDto[0];
+            using (MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("BotDatabase")))
+            {
+                connection.Open();
+                using (MySqlCommand cmd = new MySqlCommand("select * from lesson_signal;",
+                    connection))
+                {
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            LessonSignalDto lessonSignalDto = new LessonSignalDto();
+                            lessonSignalDto.Id = reader.GetInt32("id");
+                            lessonSignalDto.Timestamp = reader.GetDateTime("Timestamp");
+                            lessonSignalDto.UserId = reader.GetString("UserId");
+                            lessonSignalDto.Type =
+                                SignalTypeUtils.ConvertSlackMessageToSignalType(reader.GetString("signal_type"));
+                            lessonSignalDtos.Append(lessonSignalDto);
+                        }
+
+                    }
+                }
+            }
+
+            return lessonSignalDtos;
         }
 
         [HttpGet("{id}")]
@@ -39,7 +65,7 @@ namespace ucubot.Controllers
             using (MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("BotDatabase")))
             {
                 connection.Open();
-                using (MySqlCommand cmd = new MySqlCommand("select lesson_signal from lesson_signals where id='@id';",
+                using (MySqlCommand cmd = new MySqlCommand("select * from lesson_signal where id='@id';",
                     connection))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -105,7 +131,7 @@ namespace ucubot.Controllers
             using (MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("BotDatabase")))
             {
                 connection.Open();
-                using (MySqlCommand cmd = new MySqlCommand("delete  lesson_signal from lesson_signals where id='@id';",
+                using (MySqlCommand cmd = new MySqlCommand("delete * from lesson_signal where id='@id';",
                     connection))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
