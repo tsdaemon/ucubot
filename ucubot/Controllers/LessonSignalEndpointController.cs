@@ -60,18 +60,18 @@ namespace ucubot.Controllers
 				var command = new MySqlCommand(String.Format("SELECT * FROM lesson_signal WHERE id = {0};", id), connection);
 				var adapter = new MySqlDataAdapter(command);
 				adapter.Fill(table);
-				if (table.Rows.Count == 0){
-					return null;
+				if(table.Rows.Count > 0){
+					var recData = new LessonSignalDto{
+						Id = (int) table.Rows[0]["id"],
+						Timestamp = (DateTime) table.Rows[0]["time_stamp"],
+						Type = (LessonSignalType) table.Rows[0]["signal_type"],	
+						UserId = (string) table.Rows[0]["user_id"]
+					};
+					connection.Close();
+					return recData;
 				}
-				var recData = new LessonSignalDto{
-					Id = (int) table.Rows[0]["id"],
-					Timestamp = (DateTime) table.Rows[0]["time_stamp"],
-					Type = (LessonSignalType) table.Rows[0]["signal_type"],	
-					UserId = (string) table.Rows[0]["user_id"]
-				};
 				connection.Close();
-				return recData;
-
+				return null;
 			}
 			// TODO: add query to get a signal by the given id
 		}
