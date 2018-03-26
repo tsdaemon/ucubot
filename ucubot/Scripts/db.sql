@@ -1,4 +1,4 @@
 CREATE DATABASE ucubot;
-CREATE USER firstuser;
-GRANT ALL PRIVILEGES ON ucubot.* TO 'firstuser'@'%' IDENTIFIED BY '213';
+CREATE USER 'firstuser'@'%' IDENTIFIED BY '213';
+GRANT ALL PRIVILEGES ON ucubot.* TO 'firstuser'@'%';
 FLUSH PRIVILEGES;
