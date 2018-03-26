@@ -10,105 +10,110 @@ using ucubot.Model;
 
 namespace ucubot.Controllers
 {
-    [Route("api/[controller]")]
-    public class LessonSignalEndpointController : Controller
-    {
-        private readonly IConfiguration _configuration;
+	[Route("api/[controller]")]
+	public class LessonSignalEndpointController : Controller
+	{
+		private readonly IConfiguration _configuration;
 
-        public LessonSignalEndpointController(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+		public LessonSignalEndpointController(IConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
 
-        [HttpGet]
-        public IEnumerable<LessonSignalDto> ShowSignals()
-        {
-            var connectionString = _configuration.GetConnectionString("BotDatabase");
-			var connection = new MySqlConnection(connectionString);
-            using (connection){
-            	connection.Open();
-                var adapter = new MySqlDataAdapter("SELECT * FROM lesson_signal;", connection);
-                
-                var dataset = new DataSet();
-                
-                adapter.Fill(dataset, "lesson_signal");
-	            var signals = new List<LessonSignalDto>();
-                for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                {
-	                signals.Add(new LessonSignalDto
-                    {
-                        Id = (int) dataset.Tables[0].Rows[i]["id"],
-                        Timestamp = (DateTime) dataset.Tables[0].Rows[i]["time_stamp"],
-                        Type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[i]["signal_type"]),
-                        UserId = (string) dataset.Tables[0].Rows[i]["user_id"]
-                    });
-                }
-	            connection.Close();
-	            return signals;
-			}
-        }
-        
-        [HttpGet("{id}")]
-        public LessonSignalDto ShowSignal(long id)
-        {
+		[HttpGet]
+		public IEnumerable<LessonSignalDto> ShowSignals()
+		{
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
+			var signals = new List<LessonSignalDto>();
 			using (connection){
 				connection.Open();
-				var command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id = @id", connection);
-				command.Parameters.AddWithValue("id", id);
-                var adapter = new MySqlDataAdapter(command);
-                
-                var dataset = new DataSet();
-                
-                adapter.Fill(dataset, "lesson_signal");
-
-				if(dataset.Tables[0].Rows.Count != 0){
-					var signalDto = new LessonSignalDto{
-						Timestamp = (DateTime) dataset.Tables[0].Rows[0]["time_stamp"],
-						Type = (LessonSignalType)Convert.ToInt32(dataset.Tables[0].Rows[0]["signal_type"]),
-						UserId = (string) dataset.Tables[0].Rows[0]["user_id"]
+				var table = new DataTable();
+				var command = new MySqlCommand("SELECT * FROM lesson_signal;", connection);
+				var adapter = new MySqlDataAdapter(command);
+				adapter.Fill(table);
+				foreach(DataRow row in table.Rows)
+				{
+					var recData = new LessonSignalDto
+					{
+						Id = (int) row["id"],
+						Timestamp = (DateTime) row["time_stamp"],
+						Type = (LessonSignalType) row["signal_type"],
+						UserId = (string) row["user_id"]
 					};
-					connection.Close();
-					return signalDto;
+					signals.Add(recData);
 				}
-				return null;
+				connection.Close();
 			}
-        }
-        
-        [HttpPost]
-        public async Task<IActionResult> CreateSignal(SlackMessage message)
-        {
-            var userId = message.user_id;
-            var signalType = message.text.ConvertSlackMessageToSignalType();
+			return signals;
+		}
+		
+		[HttpGet("{id}")]
+		public LessonSignalDto ShowSignal(long id)
+		{
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
-			using (connection){
+			using (connection)
+			{
 				connection.Open();
-				var command = connection.CreateCommand();
-				command.CommandText = "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@userId, @signalType);";
-				command.Parameters.Add(new MySqlParameter("user_id", userId));
-				command.Parameters.Add(new MySqlParameter("signal_type", signalType));
+				var table = new DataTable();
+				var command = new MySqlCommand(String.Format("SELECT * FROM lesson_signal WHERE id = {0};", id), connection);
+				var adapter = new MySqlDataAdapter(command);
+				adapter.Fill(table);
+				if (table.Rows.Count == 0){
+					return null;
+				}
+				var recData = new LessonSignalDto{
+					Id = (int) table.Rows[0]["id"],
+					Timestamp = (DateTime) table.Rows[0]["time_stamp"],
+					Type = (LessonSignalType) table.Rows[0]["signal_type"],	
+					UserId = (string) table.Rows[0]["user_id"]
+				};
+				connection.Close();
+				return recData;
+
+			}
+			// TODO: add query to get a signal by the given id
+		}
+		
+		[HttpPost]
+		public async Task<IActionResult> CreateSignal(SlackMessage message)
+		{
+			var userId = message.user_id;
+			var signalType = message.text.ConvertSlackMessageToSignalType();
+
+			var connectionString = _configuration.GetConnectionString("BotDatabase");
+			var connection = new MySqlConnection(connectionString);
+			using (connection)
+			{
+				connection.Open();
+				var command =
+					new MySqlCommand(
+						String.Format("INSERT INTO lesson_signal (time_stamp, signal_type, user_id) VALUES ({0}, {1}, {2});", 
+							DateTime.Now, signalType, userId), connection);
 				await command.ExecuteNonQueryAsync();
 				connection.Close();
 			}
-            return Accepted();
-        }
-        
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveSignal(long id)
-        {
+			// TODO: add insert command to store signal
+			return Accepted();
+		}
+		
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> RemoveSignal(long id)
+		{
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
-			using (connection){
+			using (connection)
+			{
 				connection.Open();
-				var command = connection.CreateCommand();
-				command.CommandText = "DELETE FROM lesson_signal WHERE id = @id";
-				command.Parameters.Add(new MySqlParameter("id", id));
+				var command =
+					new MySqlCommand(String.Format("DELETE FROM lesson_signal WHERE id = {0};", id), connection);
 				await command.ExecuteNonQueryAsync();
 				connection.Close();
 			}
-            return Accepted();
-        }
-    }
+
+			//TODO: add delete command to remove signal
+			return Accepted();
+		}
+	}
 }
