@@ -57,7 +57,7 @@ namespace ucubot.Controllers
 			{
 				connection.Open();
 				var table = new DataTable();
-				var command = new MySqlCommand(String.Format("SELECT * FROM lesson_signal WHERE id = {0};", id), connection);
+				var command = new MySqlCommand("SELECT * FROM lesson_signal WHERE id = " + id + ";", connection);
 				var adapter = new MySqlDataAdapter(command);
 				adapter.Fill(table);
 				if(table.Rows.Count > 0){
@@ -81,16 +81,16 @@ namespace ucubot.Controllers
 		{
 			var userId = message.user_id;
 			var signalType = message.text.ConvertSlackMessageToSignalType();
-
 			var connectionString = _configuration.GetConnectionString("BotDatabase");
 			var connection = new MySqlConnection(connectionString);
 			using (connection)
 			{
 				connection.Open();
 				var command =
-					new MySqlCommand(
-						String.Format("INSERT INTO lesson_signal (time_stamp, signal_type, user_id) VALUES ({0}, {1}, {2});", 
-							DateTime.Now, signalType, userId), connection);
+					new MySqlCommand("INSERT INTO lesson_signal (user_id, signal_type, time_stamp) VALUES (@userId, @signalType, @timeStamp);", connection);				
+				command.Parameters.AddWithValue("userId", userId);
+				command.Parameters.AddWithValue("signalType", signalType);
+				command.Parameters.AddWithValue("timeStamp", DateTime.Now);
 				await command.ExecuteNonQueryAsync();
 				connection.Close();
 			}
@@ -107,7 +107,7 @@ namespace ucubot.Controllers
 			{
 				connection.Open();
 				var command =
-					new MySqlCommand(String.Format("DELETE FROM lesson_signal WHERE id = {0};", id), connection);
+					new MySqlCommand("DELETE FROM lesson_signal WHERE id = " + id + ";", connection);
 				await command.ExecuteNonQueryAsync();
 				connection.Close();
 			}
