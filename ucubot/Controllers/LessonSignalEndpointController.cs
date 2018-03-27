@@ -146,7 +146,7 @@ namespace ucubot.Controllers
                     
                     cmd.Parameters.AddWithValue("@signalType", signalType);
                     cmd.Parameters.AddWithValue("@userId", userId);
-                    cmd.Parameters.AddWithValue("@date", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@Date", DateTime.Now);
                     if (cmd.ExecuteNonQuery() == -1)
                     {
                         return Forbid();
