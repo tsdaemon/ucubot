@@ -168,6 +168,12 @@ namespace ucubot.Controllers
                 return Forbid();
             }            
 
+            if (id <= 0)
+            {
+                return Forbid();
+            }
+
+            LessonSignalDto lessonSignalDto = new LessonSignalDto();
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -186,4 +192,4 @@ namespace ucubot.Controllers
         }
     }
 }
-    
+
