@@ -28,7 +28,7 @@ namespace ucubot.Controllers
         [HttpGet]
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
-            MySqlConnection sqlConnection = new MySqlConnection(connectionString);
+/*            MySqlConnection sqlConnection = new MySqlConnection(connectionString);
             sqlConnection.Open();
             MySqlCommand cmd = new MySqlCommand("SELECT * FROM lesson_signal;", sqlConnection);
             MySqlDataAdapter query = new MySqlDataAdapter(cmd);
@@ -47,13 +47,44 @@ namespace ucubot.Controllers
             }
 
             sqlConnection.Close();      
+*/
+            
+            
+            IEnumerable<LessonSignalDto> lessonSignalDtos = new List<LessonSignalDto>();
+            
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                using (MySqlCommand cmd = new MySqlCommand("select * from lesson_signal;",
+                    connection))
+                {
 
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            LessonSignalDto lessonSignalDto = new LessonSignalDto();
+                            lessonSignalDto.Id = reader.GetInt32("id");
+                            lessonSignalDto.Timestamp = reader.GetDateTime("Timestamp");
+                            lessonSignalDto.UserId = reader.GetString("UserId");
+                            lessonSignalDto.Type =
+                                SignalTypeUtils.ConvertSlackMessageToSignalType(reader.GetString("signal_type"));
+                            lessonSignalDtos.Append(lessonSignalDto);
+                        }
+
+                    }
+                }
+            }
+
+            return lessonSignalDtos;
+            
         }
 
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {
-            /*
+            
             LessonSignalDto lessonSignalDto = new LessonSignalDto();
             MySqlConnection connection = new MySqlConnection(connectionString);
             connection.Open();
@@ -63,7 +94,10 @@ namespace ucubot.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-
+                        if (!reader.HasRows)
+                        {
+                            throw new System.Exception();
+                        }
                         while (reader.Read())
                         {
                             lessonSignalDto.Id = reader.GetInt32("id");
@@ -81,41 +115,41 @@ namespace ucubot.Controllers
 
 
 
-            return lessonSignalDto;*/
-            
+            return lessonSignalDto;
+           /* 
             MySqlConnection mySqlConnection = new MySqlConnection(connectionString);
-            
+
             mySqlConnection.Open();
-            
-            string commandString = "SELECT * FROM lesson_signal WHERE id =@id;";
-            
-            MySqlCommand command = new MySqlCommand(commandString, mySqlConnection);
-            
-            command.Parameters.AddWithValue("id", id);
-            
-            MySqlDataAdapter query = new MySqlDataAdapter(command);
-            
-            DataSet dataSet = new DataSet();
-            
-            query.Fill(dataSet);
-
-            if (dataSet.Tables[0].Rows.Count < 1)
-            {
-                return null;
-            }
-
-            var row = dataSet.Tables[0].Rows[0];
-            LessonSignalDto signalDto = new LessonSignalDto();
-            
-            signalDto.Id = (int) row["id"];
-            signalDto.Timestamp = (DateTime) row["timestamp_"];
-            signalDto.Type = SignalTypeUtils.ConvertSlackMessageToSignalType((string) row["signal_type"]);
-            signalDto.UserId = (string) row["user_id"];
-            
-            mySqlConnection.Close();
-            
-            return signalDto;
-   
+//////            
+//////            string commandString = "SELECT * FROM lesson_signal WHERE id =@id;";
+//////            
+//////            MySqlCommand command = new MySqlCommand(commandString, mySqlConnection);
+//////            
+//////            command.Parameters.AddWithValue("id", id);
+//////            
+//////            MySqlDataAdapter query = new MySqlDataAdapter(command);
+//////            
+//////            DataSet dataSet = new DataSet();
+//////            
+//////            query.Fill(dataSet);
+//////
+//////            if (dataSet.Tables[0].Rows.Count < 1)
+//////            {
+//////                return null;
+//////            }
+//////
+//////            var row = dataSet.Tables[0].Rows[0];
+//////            LessonSignalDto signalDto = new LessonSignalDto();
+//////            
+//////            signalDto.Id = (int) row["id"];
+//////            signalDto.Timestamp = (DateTime) row["timestamp_"];
+//////            signalDto.Type = SignalTypeUtils.ConvertSlackMessageToSignalType((string) row["signal_type"]);
+//////            signalDto.UserId = (string) row["user_id"];
+//////            
+//////            mySqlConnection.Close();
+//////            
+//////            return signalDto;
+   */
         }
 
         [HttpPost]
@@ -168,12 +202,8 @@ namespace ucubot.Controllers
                 return Forbid();
             }            
 
-            if (id <= 0)
-            {
-                return Forbid();
-            }
 
-            LessonSignalDto lessonSignalDto = new LessonSignalDto();
+          
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
