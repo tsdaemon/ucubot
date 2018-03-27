@@ -140,16 +140,19 @@ namespace ucubot.Controllers
                 connection.Open();
                 String str =
                     "INSERT INTO lesson_signal (signalType, Timestamp, userId) VALUES (@signalType, @Date, @userId)";
+                
                 using (MySqlCommand cmd = new MySqlCommand(str, connection))
                 {
+                    
                     cmd.Parameters.AddWithValue("@signalType", signalType);
                     cmd.Parameters.AddWithValue("@userId", userId);
+                    cmd.Parameters.AddWithValue("@date", DateTime.Now);
                     if (cmd.ExecuteNonQuery() == -1)
                     {
                         return Forbid();
                     }
                 }
-
+                connection.Close();
             }
 
 
