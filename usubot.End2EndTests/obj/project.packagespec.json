@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "/home/vlad/RiderProjects/ucubot/usubot.End2EndTests/usubot.End2EndTests.csproj",
+    "projectUniqueName": "/home/max_voloskiy/Desktop/new/usubot.End2EndTests/usubot.End2EndTests.csproj",
     "projectName": "usubot.End2EndTests",
-    "projectPath": "/home/vlad/RiderProjects/ucubot/usubot.End2EndTests/usubot.End2EndTests.csproj",
-    "outputPath": "/home/vlad/RiderProjects/ucubot/usubot.End2EndTests/obj/",
+    "projectPath": "/home/max_voloskiy/Desktop/new/usubot.End2EndTests/usubot.End2EndTests.csproj",
+    "outputPath": "/home/max_voloskiy/Desktop/new/usubot.End2EndTests/obj/",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "/usr/share/dotnet/sdk/NuGetFallbackFolder"
@@ -15,8 +15,8 @@
     "frameworks": {
       "netcoreapp2.0": {
         "projectReferences": {
-          "/home/vlad/RiderProjects/ucubot/ucubot/ucubot.csproj": {
-            "projectPath": "/home/vlad/RiderProjects/ucubot/ucubot/ucubot.csproj"
+          "/home/max_voloskiy/Desktop/new/ucubot/ucubot.csproj": {
+            "projectPath": "/home/max_voloskiy/Desktop/new/ucubot/ucubot.csproj"
           }
         }
       }
@@ -41,7 +41,8 @@
         "Microsoft.NETCore.App": {
           "suppressParent": "All",
           "target": "Package",
-          "version": "[2.0.5, )"
+          "version": "[2.0.0, )",
+          "autoReferenced": true
         },
         "MySql.Data": {
           "target": "Package",

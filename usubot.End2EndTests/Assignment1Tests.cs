@@ -113,7 +113,7 @@ namespace usubot.End2EndTests
         {
             // check is empty
             var getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            var values = JsonConvert.DeserializeObject<LessonSignalDto[]>(getResponse);
+            var values = ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(0);
             
             // create
@@ -140,6 +140,52 @@ namespace usubot.End2EndTests
             getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
             values = ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(0);
+        }
+        
+        [Test, Order(4)]
+        public async Task TestSqlInjectionFail()
+        {
+            // check is empty
+            var getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
+            var values = ParseJson<LessonSignalDto[]>(getResponse);
+            values.Length.Should().Be(0);
+            
+            // create
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("user_id", "U111"),
+                new KeyValuePair<string, string>("text", "simple")
+            });
+            var createResponse = await _client.PostAsync("/api/LessonSignalEndpoint", content);
+            createResponse.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            
+            // create another with attack
+            content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("user_id", "U111', 0); DELETE FROM lesson_signal; #"),
+                new KeyValuePair<string, string>("text", "simple")
+            });
+            createResponse = await _client.PostAsync("/api/LessonSignalEndpoint", content);
+            createResponse.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            
+            // check
+            getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
+            values = ParseJson<LessonSignalDto[]>(getResponse);
+            values.Length.Should().Be(2);
+        }
+        
+        [Test, Order(5)]
+        public async Task TestNonExistRecordReturns404()
+        {
+            // get previous values
+            var getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
+            var values = ParseJson<LessonSignalDto[]>(getResponse);
+            var newId = values.Select(v => v.Id).Max() + 1;
+            
+            // check
+            var response = await _client.GetAsync($"/api/LessonSignalEndpoint/{newId}");
+            Assert.IsTrue(new[]{HttpStatusCode.NotFound, HttpStatusCode.OK, HttpStatusCode.NoContent }.Contains(response.StatusCode),
+                $"Non exists record response should not be {response.StatusCode}");
         }
 
         [TearDown]
@@ -174,7 +220,7 @@ namespace usubot.End2EndTests
                 yield return row[0].ToString();
             }
         }
-        
+
         private T ParseJson<T>(string json)
         {
             return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings

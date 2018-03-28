@@ -2461,12 +2461,12 @@
           "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
-      "Microsoft.NETCore.App/2.0.5": {
+      "Microsoft.NETCore.App/2.0.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.DotNetHostPolicy": "2.0.5",
-          "Microsoft.NETCore.Platforms": "2.0.1",
-          "NETStandard.Library": "2.0.1"
+          "Microsoft.NETCore.DotNetHostPolicy": "2.0.0",
+          "Microsoft.NETCore.Platforms": "2.0.0",
+          "NETStandard.Library": "2.0.0"
         },
         "compile": {
           "ref/netcoreapp2.0/Microsoft.CSharp.dll": {},
@@ -2617,22 +2617,22 @@
           "build/netcoreapp2.0/Microsoft.NETCore.App.targets": {}
         }
       },
-      "Microsoft.NETCore.DotNetAppHost/2.0.5": {
+      "Microsoft.NETCore.DotNetAppHost/2.0.0": {
         "type": "package"
       },
-      "Microsoft.NETCore.DotNetHostPolicy/2.0.5": {
+      "Microsoft.NETCore.DotNetHostPolicy/2.0.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.DotNetHostResolver": "2.0.5"
+          "Microsoft.NETCore.DotNetHostResolver": "2.0.0"
         }
       },
-      "Microsoft.NETCore.DotNetHostResolver/2.0.5": {
+      "Microsoft.NETCore.DotNetHostResolver/2.0.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.DotNetAppHost": "2.0.5"
+          "Microsoft.NETCore.DotNetAppHost": "2.0.0"
         }
       },
-      "Microsoft.NETCore.Platforms/2.0.1": {
+      "Microsoft.NETCore.Platforms/2.0.0": {
         "type": "package",
         "compile": {
           "lib/netstandard1.0/_._": {}
@@ -3056,7 +3056,7 @@
           }
         }
       },
-      "NETStandard.Library/2.0.1": {
+      "NETStandard.Library/2.0.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0"
@@ -7723,10 +7723,10 @@
         "microsoft.net.test.sdk.nuspec"
       ]
     },
-    "Microsoft.NETCore.App/2.0.5": {
-      "sha512": "GVbWVnJLS5H2svfavSo/m1SfLwwXVqdezf7wsuPsXsfG/fJG+dSxZuQMtI9ztSNakOzbXwxPQ4RyLyoAPbW2Wg==",
+    "Microsoft.NETCore.App/2.0.0": {
+      "sha512": "/mzXF+UtZef+VpzzN88EpvFq5U6z4rj54ZMq/J968H6pcvyLOmcupmTRpJ3CJm8ILoCGh9WI7qpDdiKtuzswrQ==",
       "type": "package",
-      "path": "microsoft.netcore.app/2.0.5",
+      "path": "microsoft.netcore.app/2.0.0",
       "files": [
         "LICENSE.TXT",
         "Microsoft.NETCore.App.versions.txt",
@@ -7734,7 +7734,7 @@
         "build/netcoreapp2.0/Microsoft.NETCore.App.PlatformManifest.txt",
         "build/netcoreapp2.0/Microsoft.NETCore.App.props",
         "build/netcoreapp2.0/Microsoft.NETCore.App.targets",
-        "microsoft.netcore.app.2.0.5.nupkg.sha512",
+        "microsoft.netcore.app.2.0.0.nupkg.sha512",
         "microsoft.netcore.app.nuspec",
         "ref/netcoreapp/_._",
         "ref/netcoreapp2.0/Microsoft.CSharp.dll",
@@ -8001,51 +8001,51 @@
         "runtime.json"
       ]
     },
-    "Microsoft.NETCore.DotNetAppHost/2.0.5": {
-      "sha512": "wz8cExxVAAlYqpPhup43w8nRcvJLgBNpdL41YPb4UmbnIYMSFQyAVkYWEgYP/XkvHpDOtjLiZZrSODyYXXwBPQ==",
+    "Microsoft.NETCore.DotNetAppHost/2.0.0": {
+      "sha512": "L4GGkcI/Mxl8PKLRpFdGmLb5oI8sGIR05bDTGkzCoamAjdUl1Zhkov2swjEsZvKYT8kkdiz39LtwyGYuCJxm1A==",
       "type": "package",
-      "path": "microsoft.netcore.dotnetapphost/2.0.5",
+      "path": "microsoft.netcore.dotnetapphost/2.0.0",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "microsoft.netcore.dotnetapphost.2.0.5.nupkg.sha512",
+        "microsoft.netcore.dotnetapphost.2.0.0.nupkg.sha512",
         "microsoft.netcore.dotnetapphost.nuspec",
         "runtime.json"
       ]
     },
-    "Microsoft.NETCore.DotNetHostPolicy/2.0.5": {
-      "sha512": "Aag20F7b7mDur/EQRt+Kl6+7osKMPZkzARLkXHTi12IJ2awoThnWnHNViFrT6on2oO4+vLYKBgONAz44xsjX8w==",
+    "Microsoft.NETCore.DotNetHostPolicy/2.0.0": {
+      "sha512": "rm7mMn0A93fwyAwVhbyOCcPuu2hZNL0A0dAur9sNG9pEkONPfCEQeF7m2mC8KpqZO0Ol6tpV5J0AF3HTXT3GXA==",
       "type": "package",
-      "path": "microsoft.netcore.dotnethostpolicy/2.0.5",
+      "path": "microsoft.netcore.dotnethostpolicy/2.0.0",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "microsoft.netcore.dotnethostpolicy.2.0.5.nupkg.sha512",
+        "microsoft.netcore.dotnethostpolicy.2.0.0.nupkg.sha512",
         "microsoft.netcore.dotnethostpolicy.nuspec",
         "runtime.json"
       ]
     },
-    "Microsoft.NETCore.DotNetHostResolver/2.0.5": {
-      "sha512": "z/HRLSjJH9XcA98RHCV5SWh7ps6p0x+0Df6MiscU4JtaBNC7h6pW2iPUraArGGZ9lhdXDVXmE3T0EXr6DwIw1g==",
+    "Microsoft.NETCore.DotNetHostResolver/2.0.0": {
+      "sha512": "uBbjpeSrwsaTCADZCzRk+3aBzNnMqkC4zftJWBsL+Zk+8u+W+/lMb2thM5Y4hiVrv1YQg9t6dKldXzOKkY+pQw==",
       "type": "package",
-      "path": "microsoft.netcore.dotnethostresolver/2.0.5",
+      "path": "microsoft.netcore.dotnethostresolver/2.0.0",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "microsoft.netcore.dotnethostresolver.2.0.5.nupkg.sha512",
+        "microsoft.netcore.dotnethostresolver.2.0.0.nupkg.sha512",
         "microsoft.netcore.dotnethostresolver.nuspec",
         "runtime.json"
       ]
     },
-    "Microsoft.NETCore.Platforms/2.0.1": {
-      "sha512": "Rgwturmal/A4iD0kqWu0NYAjz7hBsioJGTCg3KzaKG9+r9jN7qbhX04L/AQvypaPyMxFfcWUelSby4ZKWxMoEA==",
+    "Microsoft.NETCore.Platforms/2.0.0": {
+      "sha512": "VdLJOCXhZaEMY7Hm2GKiULmn7IEPFE4XC5LPSfBVCUIA8YLZVh846gtfBJalsPQF2PlzdD7ecX7DZEulJ402ZQ==",
       "type": "package",
-      "path": "microsoft.netcore.platforms/2.0.1",
+      "path": "microsoft.netcore.platforms/2.0.0",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "lib/netstandard1.0/_._",
-        "microsoft.netcore.platforms.2.0.1.nupkg.sha512",
+        "microsoft.netcore.platforms.2.0.0.nupkg.sha512",
         "microsoft.netcore.platforms.nuspec",
         "runtime.json",
         "useSharedDesignerContext.txt",
@@ -8476,10 +8476,10 @@
         "mysql.data.nuspec"
       ]
     },
-    "NETStandard.Library/2.0.1": {
-      "sha512": "oA6nwv9MhEKYvLpjZ0ggSpb1g4CQViDVQjLUcDWg598jtvJbpfeP2reqwI1GLW2TbxC/Ml7xL6BBR1HmKPXlTg==",
+    "NETStandard.Library/2.0.0": {
+      "sha512": "7jnbRU+L08FXKMxqUflxEXtVymWvNOrS8yHgu9s6EM8Anr6T/wIX4nZ08j/u3Asz+tCufp3YVwFSEvFTPYmBPA==",
       "type": "package",
-      "path": "netstandard.library/2.0.1",
+      "path": "netstandard.library/2.0.0",
       "files": [
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -8600,7 +8600,7 @@
         "build/netstandard2.0/ref/netstandard.dll",
         "build/netstandard2.0/ref/netstandard.xml",
         "lib/netstandard1.0/_._",
-        "netstandard.library.2.0.1.nupkg.sha512",
+        "netstandard.library.2.0.0.nupkg.sha512",
         "netstandard.library.nuspec"
       ]
     },
@@ -8769,7 +8769,7 @@
       ]
     },
     "NUnit.Runners/3.7.0": {
-      "sha512": "/fvXijeJHZfmW/45N1sAS7LP6T8K+7wHvfR0RKJM8QNr8vGiuz7I6lGXjjKl8JQEbFWW47zlldpJdlqZLLHeiA==",
+      "sha512": "eJqKE/+2KY+66dlL9pxG57sg2M/4Nu+26raED+HuUMWMUinS6ELBFvqn0rz0ilvH9I2bSI6r3JvapzLxetB9yg==",
       "type": "package",
       "path": "nunit.runners/3.7.0",
       "files": [
@@ -14167,7 +14167,7 @@
     ".NETCoreApp,Version=v2.0": [
       "FluentAssertions >= 4.19.4",
       "Microsoft.NET.Test.Sdk >= 15.5.0",
-      "Microsoft.NETCore.App >= 2.0.5",
+      "Microsoft.NETCore.App >= 2.0.0",
       "MySql.Data >= 6.10.5",
       "NUnit >= 3.9.0",
       "NUnit.ConsoleRunner >= 3.7.0",
@@ -14178,23 +14178,23 @@
     ]
   },
   "packageFolders": {
-    "/home/vlad/.nuget/packages/": {},
+    "/home/max_voloskiy/.nuget/packages/": {},
     "/usr/share/dotnet/sdk/NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/vlad/RiderProjects/ucubot/usubot.End2EndTests/usubot.End2EndTests.csproj",
+      "projectUniqueName": "/home/max_voloskiy/Desktop/new/usubot.End2EndTests/usubot.End2EndTests.csproj",
       "projectName": "usubot.End2EndTests",
-      "projectPath": "/home/vlad/RiderProjects/ucubot/usubot.End2EndTests/usubot.End2EndTests.csproj",
-      "packagesPath": "/home/vlad/.nuget/packages/",
-      "outputPath": "/home/vlad/RiderProjects/ucubot/usubot.End2EndTests/obj/",
+      "projectPath": "/home/max_voloskiy/Desktop/new/usubot.End2EndTests/usubot.End2EndTests.csproj",
+      "packagesPath": "/home/max_voloskiy/.nuget/packages/",
+      "outputPath": "/home/max_voloskiy/Desktop/new/usubot.End2EndTests/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/home/vlad/.config/NuGet/NuGet.Config"
+        "/home/max_voloskiy/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -14205,8 +14205,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "/home/vlad/RiderProjects/ucubot/ucubot/ucubot.csproj": {
-              "projectPath": "/home/vlad/RiderProjects/ucubot/ucubot/ucubot.csproj"
+            "/home/max_voloskiy/Desktop/new/ucubot/ucubot.csproj": {
+              "projectPath": "/home/max_voloskiy/Desktop/new/ucubot/ucubot.csproj"
             }
           }
         }
@@ -14231,7 +14231,8 @@
           "Microsoft.NETCore.App": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[2.0.5, )"
+            "version": "[2.0.0, )",
+            "autoReferenced": true
           },
           "MySql.Data": {
             "target": "Package",
