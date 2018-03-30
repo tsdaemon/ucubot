@@ -30,23 +30,25 @@ namespace ucubot.Controllers
             {
                 //connecting to mysql
                 conn.Open();
-                string query = "SELECT * FROM lessons_signal;";
+                string query = "SELECT * FROM lesson_signal;";
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 DataTable dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
+                var adapter = new MySqlDataAdapter(cmd);
+                adapter.Fill(dt);
                 List<LessonSignalDto> result = new List<LessonSignalDto>();
-                foreach(DataRow row in dt.Rows)
+                foreach (DataRow row in dt.Rows)
                 {
                     result.Add(new LessonSignalDto
                     {
-                        Id = (int) row["Id"],
-                        user_id = (string) row["user_id"],
-                        Type = (LessonSignalType) row["signal_type"],
+                        Id = (int)row["Id"],
+                        UserId = (string)row["user_id"],
+                        Type = (LessonSignalType)row["signal_type"],
                         Timestamp = Convert.ToDateTime(row["Timestemp"])
                     });
-                    
-                    
+
+
                 }
+                adapter.Dispose();
                 conn.Close();
                 return result;
             }
@@ -56,7 +58,7 @@ namespace ucubot.Controllers
                 conn.Close();
                 return new LessonSignalDto[0];
             }
-            
+
         }
 
         [HttpGet("{id}")]
@@ -69,25 +71,27 @@ namespace ucubot.Controllers
                 //connecting to mysql
 
                 conn.Open();
-                string query = "SELECT * FROM lesson_signal WHERE id=@id";
+                var dt = new DataTable();
+                string query = "SELECT * FROM lesson_signal WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(query, conn);
-				cmd.Parameters.AddWithValue("@id", id);
-                DataTable dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
+                cmd.Parameters.AddWithValue("id", id);
+                var adapter = new MySqlDataAdapter(cmd);
+                adapter.Fill(dt);
                 if (dt.Rows.Count == 0)
                 {
                     return null;
                 }
 
                 var row = dt.Rows[0];
+                conn.Close();
                 return new LessonSignalDto
                 {
-                    Id = (int) row["Id"],
-                    user_id = (string) row["user_id"],
-                    Type = (LessonSignalType) row["signal_type"],
+                    Id = (int)row["Id"],
+                    UserId = (string)row["user_id"],
+                    Type = (LessonSignalType)row["signal_type"],
                     Timestamp = Convert.ToDateTime(row["Timestemp"])
                 };
-
+                
 
 
 
@@ -106,8 +110,9 @@ namespace ucubot.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSignal(SlackMessage message)
         {
-            var user_id = message.user_id;
+            var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
+
             var connectionString = _configuration.GetConnectionString("BotDatabase");
             MySqlConnection conn = new MySqlConnection(connectionString);
             try
@@ -119,23 +124,25 @@ namespace ucubot.Controllers
                     "INSERT INTO lesson_signal (user_id, signal_type) VALUES (@user_id, @signal_type);";
                 command.Parameters.AddRange(new[]
                 {
-                    new MySqlParameter("user_id", user_id),
+                    new MySqlParameter("user_id", userId),
                     new MySqlParameter("signal_type", signalType)
                 });
+				//may be not best
                 await command.ExecuteNonQueryAsync();
-                
+                conn.Close();
+                return Accepted();
             }
-            
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 conn.Close();
                 return NotFound();
             }
+
             
-            return Accepted();
         }
-        
+
         [HttpDelete]
         public async Task<IActionResult> RemoveSignal(long id)
         {
@@ -150,18 +157,19 @@ namespace ucubot.Controllers
                     "DELETE FROM lesson_signal WHERE ID = @id;";
                 command.Parameters.Add(new MySqlParameter("id", id));
                 await command.ExecuteNonQueryAsync();
-                
-                return Accepted();
+                conn.Close();
             }
-            
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 conn.Close();
-                return NotFound();
+                // return NotFound();
             }
-            
-        }
+
+            return Accepted();
+
         }
     }
+}
 
