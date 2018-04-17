@@ -63,7 +63,7 @@ namespace usubot.End2EndTests
                 }
                 
                 var users2 = MapDataTableToStringCollection(ExecuteDataTable("SELECT User, Host FROM mysql.user;", conn)).ToArray();
-                users2.Length.Should().Be(2);
+                users2.Length.Should().Be(1);
             }
         }
         
