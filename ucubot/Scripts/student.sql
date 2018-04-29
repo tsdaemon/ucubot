@@ -4,4 +4,6 @@ CREATE TABLE student
   first_name: VARCHAR(60),
   last_name VARCHAR(60),
   user_id VARCHAR(40),
-  primary key(id));
+  primary key(id),
+  UNIQUE(user_id)
+  );
