@@ -20,9 +20,6 @@ namespace usubot.End2EndTests
     [Category("Assignment1")]
     public class Assignment1Tests
     {
-        private const string CONNECTION_STRING_NODB = "Server=db;Uid=root;Pwd=1qaz2wsx";
-        private const string CONNECTION_STRING = "Server=db;Database=ucubot;Uid=root;Pwd=1qaz2wsx";
-
         private HttpClient _client;
 
         [SetUp]
@@ -31,62 +28,32 @@ namespace usubot.End2EndTests
             _client = new HttpClient {BaseAddress = new Uri("http://app:80")};
         }
         
-        [Test, Order(-10)]
-        public void WaitForMysqlToStart()
-        {
-            // HACK: waits few seconds to give a time for mysql container to start
-            Thread.Sleep(10000);
-            Assert.That(true);
-        }
-        
         [Test, Order(0)]
         public void CleanData()
         {
-            using (var conn = new MySqlConnection(CONNECTION_STRING_NODB))
-            {
-                conn.Open();
-                var command = conn.CreateCommand();
-                command.CommandText = "DROP DATABASE IF EXISTS ucubot;";
-                command.ExecuteNonQuery();
-                
-                var users = ExecuteDataTable("SELECT User, Host FROM mysql.user;", conn);
-                foreach (DataRow row in users.Rows)
-                {
-                    var name = (string) row["User"];
-                    if (name == "root") continue;
-                    var host = (string) row["Host"];
-
-                    var cmd = $"DROP USER '{name}'@'{host}';";
-                    var command2 = conn.CreateCommand();
-                    command2.CommandText = cmd;
-                    command2.ExecuteNonQuery();
-                }
-                
-                var users2 = MapDataTableToStringCollection(ExecuteDataTable("SELECT User, Host FROM mysql.user;", conn)).ToArray();
-                users2.Length.Should().Be(2);
-            }
+            Utils.CleanDatabase(Connection.CONNECTION_STRING_NODB);
         }
         
         [Test, Order(1)]
         public void TestDatabaseWasCreated()
         {
             // create database test
-            var dbScript = ReadMysqlScript("db");
-            using (var conn = new MySqlConnection(CONNECTION_STRING_NODB))
+            var dbScript = Utils.ReadMysqlScript("db");
+            using (var conn = new MySqlConnection(Connection.CONNECTION_STRING_NODB))
             {
                 conn.Open();
                 
-                var users1 = MapDataTableToStringCollection(ExecuteDataTable("SELECT User FROM mysql.user;", conn)).ToArray();
+                var users1 = Utils.MapDataTableToStringCollection(Utils.ExecuteDataTable("SELECT User FROM mysql.user;", conn)).ToArray();
                 users1.Length.Should().BeGreaterThan(1); // we don't know actual name of the user...
                 
                 var command = conn.CreateCommand();
                 command.CommandText = dbScript;
                 command.ExecuteNonQuery();
 
-                var databases = MapDataTableToStringCollection(ExecuteDataTable("SHOW DATABASES;", conn)).ToArray();
+                var databases = Utils.MapDataTableToStringCollection(Utils.ExecuteDataTable("SHOW DATABASES;", conn)).ToArray();
                 databases.Should().Contain("ucubot");
 
-                var users = MapDataTableToStringCollection(ExecuteDataTable("SELECT User FROM mysql.user;", conn)).ToArray();
+                var users = Utils.MapDataTableToStringCollection(Utils.ExecuteDataTable("SELECT User FROM mysql.user;", conn)).ToArray();
                 users.Length.Should().Be(3); // we don't know actual name of the user, and there is only root exists after cleanup
             }
         }
@@ -95,15 +62,15 @@ namespace usubot.End2EndTests
         public void TestTableWasCreated()
         {
             // create database test
-            var dbScript = ReadMysqlScript("lesson-signal");
-            using (var conn = new MySqlConnection(CONNECTION_STRING))
+            var dbScript = Utils.ReadMysqlScript("lesson-signal");
+            using (var conn = new MySqlConnection(Connection.CONNECTION_STRING_NODB))
             {
                 conn.Open();
                 var command = conn.CreateCommand();
                 command.CommandText = dbScript;
                 command.ExecuteNonQuery();
                 
-                var tables = MapDataTableToStringCollection(ExecuteDataTable("SHOW TABLES;", conn)).ToArray();
+                var tables = Utils.MapDataTableToStringCollection(Utils.ExecuteDataTable("SHOW TABLES;", conn)).ToArray();
                 tables.Should().Contain("lesson_signal");
             }
         }
@@ -113,7 +80,7 @@ namespace usubot.End2EndTests
         {
             // check is empty
             var getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            var values = JsonConvert.DeserializeObject<LessonSignalDto[]>(getResponse);
+            var values = Utils.ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(0);
             
             // create
@@ -127,7 +94,7 @@ namespace usubot.End2EndTests
             
             // check
             getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            values = ParseJson<LessonSignalDto[]>(getResponse);
+            values = Utils.ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(1);
             values[0].UserId.Should().Be("U111");
             values[0].Type.Should().Be(LessonSignalType.BoringSimple);
@@ -138,7 +105,7 @@ namespace usubot.End2EndTests
             
             // check
             getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            values = ParseJson<LessonSignalDto[]>(getResponse);
+            values = Utils.ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(0);
         }
         
@@ -147,7 +114,7 @@ namespace usubot.End2EndTests
         {
             // check is empty
             var getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            var values = ParseJson<LessonSignalDto[]>(getResponse);
+            var values = Utils.ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(0);
             
             // create
@@ -170,7 +137,7 @@ namespace usubot.End2EndTests
             
             // check
             getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            values = ParseJson<LessonSignalDto[]>(getResponse);
+            values = Utils.ParseJson<LessonSignalDto[]>(getResponse);
             values.Length.Should().Be(2);
         }
         
@@ -179,7 +146,7 @@ namespace usubot.End2EndTests
         {
             // get previous values
             var getResponse = await _client.GetStringAsync("/api/LessonSignalEndpoint");
-            var values = ParseJson<LessonSignalDto[]>(getResponse);
+            var values = Utils.ParseJson<LessonSignalDto[]>(getResponse);
             var newId = values.Select(v => v.Id).Max() + 1;
             
             // check
@@ -192,44 +159,6 @@ namespace usubot.End2EndTests
         public void Done()
         {
             _client.Dispose();
-        }
-
-        private string ReadMysqlScript(string scriptName)
-        {
-            using (var reader = new StreamReader(File.OpenRead($"/app/ucubot/Scripts/{scriptName}.sql")))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-
-        private DataTable ExecuteDataTable(string sqlCommand, MySqlConnection conn)
-        {
-            var adapter = new MySqlDataAdapter(sqlCommand, conn);
-
-            var dataset = new DataSet();
-
-            adapter.Fill(dataset);
-
-            return dataset.Tables[0];
-        }
-
-        private IEnumerable<string> MapDataTableToStringCollection(DataTable table)
-        {
-            foreach (DataRow row in table.Rows)
-            {
-                yield return row[0].ToString();
-            }
-        }
-        
-        private T ParseJson<T>(string json)
-        {
-            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new SnakeCaseNamingStrategy()
-                }
-            });
         }
     }
 }
