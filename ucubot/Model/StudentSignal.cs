@@ -1,4 +1,19 @@
-﻿$HEADER$namespace $NAMESPACE$
+﻿namespace ucubot.Model
 {
-  public class $CLASS$ {$END$}
+    public class StudentSignal
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string SignalType { get; set; }
+        public int Count { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var s = (StudentSignal) obj;
+            return s.Count == Count
+                   && s.FirstName == s.FirstName
+                   && s.LastName == LastName
+                   && s.SignalType == SignalType;
+        }
+    }
 }

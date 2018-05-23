@@ -111,7 +111,7 @@ namespace usubot.End2EndTests
                 });
             
             // get aggregation results
-            var getAggResponse = await _client.GetStringAsync("/api/StudentSignalEndpoint");
+            var getAggResponse = await _client.GetStringAsync("/api/StudentSignalsEndpoint");
             var aggregated = Utils.ParseJson<StudentSignal[]>(getAggResponse);
             var sumActual = aggregated.Select(a => a.Count).Sum();
             var sumExpected = aggregatedExpected.Select(a => a.Count).Sum();
