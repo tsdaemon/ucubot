@@ -11,7 +11,7 @@
         {
             var s = (StudentSignal) obj;
             return s.Count == Count
-                   && s.FirstName == s.FirstName
+                   && s.FirstName == FirstName
                    && s.LastName == LastName
                    && s.SignalType == SignalType;
         }
