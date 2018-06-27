@@ -1,0 +1,5 @@
+{
+	"ConnectionStrings": {
+		"BotDatabase": "Server=http://localhost:5000/;Database=ucubot;Uid=anastasia;Pwd=daps24;"
+	}
+}

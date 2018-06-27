@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -24,15 +25,66 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            // TODO: add query to get all signals
-            return new LessonSignalDto[0];
+            string query = "SELECT * FROM lesson-signal";
+			var dataTable = new DataTable();
+			var connection = new MySqlConnection(connectionString);
+			var command = new MySqlCommand(query, connection);
+			var lessonSignalsArray = new List<LessonSignalDto>();
+			
+			connection.Open();
+			
+			var adapter = new MySqlDataAdapter(command);
+			adapter.Fill(dataTable);
+			
+			connection.Close();
+			adapter.Dispose();
+			
+			foreach(DataRow row in dataTable.Rows)
+			{
+				lessonSignalsArray.Add(
+				{
+					Id = (int) row["Id"],
+					DateTime = (DateTime) row["DateTime"],
+					Type = (LessonSignalType) row["SignalType"],
+					UserId = (string) row["UserId"]
+				});
+				
+			}
+			
+			
+            return lessonSignalsArray;
         }
         
         [HttpGet("{id}")]
         public LessonSignalDto ShowSignal(long id)
         {
             // TODO: add query to get a signal by the given id
-            return null;
+			var connectionString = _configuration.GetConnectionString("BotDatabase");
+            string query = "SELECT * FROM lesson-signal";
+			var dataTable = new DataTable();
+			var connection = new MySqlConnection(connectionString);
+			var command = new MySqlCommand(query, connection);
+			var lessonSignalsArray = new List<LessonSignalDto>();
+			var row = _dataTable.Rows[0];
+			
+			connection.Open();
+			
+			var adapter = new MySqlDataAdapter(command);
+			adapter.Fill(dataTable);
+			
+			if (dataTable.Rows.Count < 1){
+				return null;
+			}
+			
+			var signal = new LessonSignalDto{
+				Id = (int) row["Id"],
+				DateTime = (DateTime) row["DateTime"],
+				Type = (LessonSignalType) row["SignalType"],
+				UserId = (string) row["UserId"]
+				};
+			}
+			connection.Close();
+            return signal;
         }
         
         [HttpPost]
@@ -41,7 +93,18 @@ namespace ucubot.Controllers
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
 
-            // TODO: add insert command to store signal
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+			var connection = new MySqlConnection(connectionString);
+			string query = "INSERT INTO lesson_signal (SignalType, UserId) VALUES (@SignalType, @UserId)";
+			var command = new MySqlCommand(query, connection);
+			
+			connection.Open();
+			
+            command.Parameters.Add(new MySqlParameter("@UserId", userId));
+            command.Parameters.Add(new MySqlParameter("@SignalType", signalType));
+            command.ExecuteNonQuery();
+			
+			connection.Close();
             
             return Accepted();
         }
@@ -49,8 +112,16 @@ namespace ucubot.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            //TODO: add delete command to remove signal
-            return Accepted();
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+			var connection = new MySqlConnection(connectionString);
+			string query = "DELETE FROM lesson-signal WHERE Id = ";
+			var command = new MySqlCommand(query + Id.ToString(), connection);
+			
+			connection.Open();
+			command.ExecuteNonQuery();
+			connection.Close();
+            
+			return Accepted();
         }
     }
 }
