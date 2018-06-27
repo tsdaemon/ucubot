@@ -93,7 +93,18 @@ namespace ucubot.Controllers
             var userId = message.user_id;
             var signalType = message.text.ConvertSlackMessageToSignalType();
 
-            // TODO: add insert command to store signal
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+			var connection = new MySqlConnection(connectionString);
+			string query = "INSERT INTO lesson_signal (SignalType, UserId) VALUES (@SignalType, @UserId)";
+			var command = new MySqlCommand(query, connection);
+			
+			connection.Open();
+			
+            command.Parameters.Add(new MySqlParameter("@UserId", userId));
+            command.Parameters.Add(new MySqlParameter("@SignalType", signalType));
+            command.ExecuteNonQuery();
+			
+			connection.Close();
             
             return Accepted();
         }
@@ -101,8 +112,16 @@ namespace ucubot.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveSignal(long id)
         {
-            //TODO: add delete command to remove signal
-            return Accepted();
+            var connectionString = _configuration.GetConnectionString("BotDatabase");
+			var connection = new MySqlConnection(connectionString);
+			string query = "DELETE FROM lesson-signal WHERE Id = ";
+			var command = new MySqlCommand(query + Id.ToString(), connection);
+			
+			connection.Open();
+			command.ExecuteNonQuery();
+			connection.Close();
+            
+			return Accepted();
         }
     }
 }
