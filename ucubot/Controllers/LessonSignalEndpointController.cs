@@ -44,7 +44,7 @@ namespace ucubot.Controllers
 				lessonSignalsArray.Add(
 				{
 					Id = (int) row["Id"],
-					DataTime = (DateTime) row["TIMESTAMP"],
+					DateTime = (DateTime) row["DateTime"],
 					Type = (LessonSignalType) row["SignalType"],
 					UserId = (string) row["UserId"]
 				});
@@ -59,7 +59,32 @@ namespace ucubot.Controllers
         public LessonSignalDto ShowSignal(long id)
         {
             // TODO: add query to get a signal by the given id
-            return null;
+			var connectionString = _configuration.GetConnectionString("BotDatabase");
+            string query = "SELECT * FROM lesson-signal";
+			var dataTable = new DataTable();
+			var connection = new MySqlConnection(connectionString);
+			var command = new MySqlCommand(query, connection);
+			var lessonSignalsArray = new List<LessonSignalDto>();
+			var row = _dataTable.Rows[0];
+			
+			connection.Open();
+			
+			var adapter = new MySqlDataAdapter(command);
+			adapter.Fill(dataTable);
+			
+			if (dataTable.Rows.Count < 1){
+				return null;
+			}
+			
+			var signal = new LessonSignalDto{
+				Id = (int) row["Id"],
+				DateTime = (DateTime) row["DateTime"],
+				Type = (LessonSignalType) row["SignalType"],
+				UserId = (string) row["UserId"]
+				};
+			}
+			connection.Close();
+            return signal;
         }
         
         [HttpPost]
