@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +25,34 @@ namespace ucubot.Controllers
         public IEnumerable<LessonSignalDto> ShowSignals()
         {
             var connectionString = _configuration.GetConnectionString("BotDatabase");
-            // TODO: add query to get all signals
-            return new LessonSignalDto[0];
+            string query = "SELECT * FROM lesson-signal";
+			var dataTable = new DataTable();
+			var connection = new MySqlConnection(connectionString);
+			var command = new MySqlCommand(query, connection);
+			var lessonSignalsArray = new List<LessonSignalDto>();
+			
+			connection.Open();
+			
+			var adapter = new MySqlDataAdapter(command);
+			adapter.Fill(dataTable);
+			
+			connection.Close();
+			adapter.Dispose();
+			
+			foreach(DataRow row in dataTable.Rows)
+			{
+				lessonSignalsArray.Add(
+				{
+					Id = (int) row["Id"],
+					DataTime = (DateTime) row["TIMESTAMP"],
+					Type = (LessonSignalType) row["SignalType"],
+					UserId = (string) row["UserId"]
+				});
+				
+			}
+			
+			
+            return lessonSignalsArray;
         }
         
         [HttpGet("{id}")]
